@@ -1,15 +1,24 @@
 const io = require('socket.io-client');
+
 const endPoint = "localhost:9000";
+var socket = undefined;
 
 export const VideoRecorder = () => {
-    const socket = io.connect(endPoint);
-    socket.on('connect', function () {
-        console.log("Connected...!", socket.connected)
-    });
+    socket = io.connect(endPoint);
+    if (socket !== undefined) {
+        socket.on('connect', function () {
+            var userData = {
+                user_email: "email@gmail.com",
+                user_id: "1"
+            };
+            socket.emit('user_connected', userData);
+            console.log("Connected...!", socket.connected)
+        });
 
-    socket.on('response_back', function (data) {
-        console.log("response_back", data)
-    });
+        socket.on('response_back', function (data) {
+            console.log("response_back ", data)
+        });
+    }
 
     window.onload = function () {
         var canvas = document.getElementById('canvas');
@@ -33,12 +42,17 @@ export const VideoRecorder = () => {
             var width = 400;
             var height = 300;
             context.drawImage(video, 0, 0, width, height);
-            // console.log(context)
-            // var data = canvas.toDataURL('image/jpeg', 0.5);
-            var data = canvas.toDataURL("image/jpeg").split(';base64,')[1];
+            var imageBase64 = canvas.toDataURL("image/jpeg").split(';base64,')[1];
             context.clearRect(0, 0, width, height);
-            // console.log(data);
+            var data = {
+                imageBase64: imageBase64,
+                timeStamp: Math.floor(new Date().getTime() / 1000)
+            }
             socket.emit('image', data);
         }, 1000 / FPS);
     }
+}
+
+export function socketDisconnect() {
+    socket.disconnect();
 }

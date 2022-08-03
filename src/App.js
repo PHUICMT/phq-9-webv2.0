@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { VideoRecorder } from './services/video-recorder';
+import { VideoRecorder, socketDisconnect } from './services/video-recorder';
 import { VideoPlayer } from './services/video-player';
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
     <div className="App">
       <VideoPlayer />
       <VideoRecorder />
+      <button onClick={() => { socketDisconnect() }}>Disconnect</button>
     </div>
   );
 }
