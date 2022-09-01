@@ -1,0 +1,10 @@
+.survey-content  {
+    padding: 20px !important;
+}
+
+.survey-item {
+    min-height: 120px;
+    display: grid;
+    padding-left: 24px !important;
+    justify-content: unset !important;
+}

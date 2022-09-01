@@ -19,17 +19,20 @@ export function InputEmailField(props) {
         <React.Fragment>
             <FormControl>
                 <TextField
+                    focused
+                    color="info"
                     error={dirty && isValid === false}
                     onBlur={() => setDirty(true)}
                     id={props.fieldName}
                     label={props.label}
                     name={props.fieldName}
-                    variant="outlined"
+                    variant="filled"
                     size={'small'}
                     helperText={props.helperText}
                     value={value}
                     InputLabelProps={{
                         shrink: true,
+                        color: 'primary'
                     }}
                     onChange={(e) => handleChange(e)}
                     style={{ marginTop: 20, width: 400 }}

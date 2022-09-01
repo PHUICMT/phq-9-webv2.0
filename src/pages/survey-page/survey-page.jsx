@@ -1,3 +1,5 @@
+import { styles } from './survey-page-styles';
+
 import { RowRadioButtonsGroup } from '../../components/survey-item/survey-item';
 import { InputEmailField } from '../../components/input-email-field/input-email-field';
 import { Header } from '../../components/header/header';
@@ -37,8 +39,10 @@ export function SurveyPage() {
                     handleChange={handleEmailChange}
                 />
                 <Button
+                    style={styles.button}
                     disabled={!isValidEmail}
                     variant="contained"
+                    size="large"
                     endIcon={<SendIcon />}
                 >
                     ส่งคำตอบ

@@ -1,3 +1,4 @@
+import './survey-item.css';
 import { styles } from './survey-item-styles';
 
 import * as React from 'react';
@@ -24,6 +25,21 @@ export function RowRadioButtonsGroup(props) {
         }
     }));
 
+    const StyledCardContent = styled((props) => (
+        <CardContent {...props} />
+    ))(({ theme }) => ({
+        ".MuiCardContent-root": {
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
+            borderRadius: "12px",
+            backgroundColor: "rgba(255,255,255,0.5)",
+            "&:hover": {
+                backgroundColor: 'rgba(255,255,255,0.9)',
+            }
+        }
+    }));
+
     function MyFormControlLabel(props) {
         const radioGroup = useRadioGroup();
 
@@ -37,8 +53,8 @@ export function RowRadioButtonsGroup(props) {
     }
 
     return (
-        <Card style={styles.card}>
-            <CardContent style={styles.cardContent}>
+        <StyledCardContent className="survey-content">
+            <StyledCardContent className="survey-item">
                 <Grid2 container spacing={2}>
                     <Grid2 xs={8} style={styles.typography}>
                         <Typography id="demo-row-radio-buttons-group-label">{props.title}</Typography>
@@ -59,7 +75,7 @@ export function RowRadioButtonsGroup(props) {
                         </FormControl>
                     </Grid2>
                 </Grid2>
-            </CardContent>
-        </Card>
+            </StyledCardContent>
+        </StyledCardContent>
     );
 }
