@@ -6,7 +6,6 @@ import Radio from '@mui/material/Radio';
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Grid2 from '@mui/material/Unstable_Grid2';
@@ -17,7 +16,7 @@ export function RowRadioButtonsGroup(props) {
 
     const StyledFormControlLabel = styled((props) => (
         <FormControlLabel {...props} />
-    ))(({ theme, checked }) => ({
+    ))(({ _, checked }) => ({
         ".MuiFormControlLabel-label": checked && {
             color: "#1976d2",
             fontWeight: "bold",
@@ -27,7 +26,7 @@ export function RowRadioButtonsGroup(props) {
 
     const StyledCardContent = styled((props) => (
         <CardContent {...props} />
-    ))(({ theme }) => ({
+    ))(({ _ }) => ({
         ".MuiCardContent-root": {
             alignItems: "center",
             justifyContent: "center",

@@ -21,16 +21,15 @@ export const VideoRecorder = () => {
     }
 
     window.onload = function () {
-        var canvas = document.getElementById('canvas');
+        var video = document.createElement('video');
+        var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
-        const video = document.querySelector("#videoElement");
-
 
         if (navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true })
                 .then(function (stream) {
                     video.srcObject = stream;
-                    video.play();
+                    console.log("stream ", stream)
                 })
                 .catch(function (e) {
                     console.log(e)
@@ -46,8 +45,11 @@ export const VideoRecorder = () => {
             context.clearRect(0, 0, width, height);
             var data = {
                 imageBase64: imageBase64,
-                timeStamp: Math.floor(new Date().getTime() / 1000)
+                timeStamp: Math.floor(new Date().getTime() / 1000),
+                user_email: "email@gmail.com",
+                user_id: "1"
             }
+            console.log("data ", data)
             socket.emit('image', data);
         }, 1000 / FPS);
     }

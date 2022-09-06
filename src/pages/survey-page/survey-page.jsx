@@ -4,6 +4,10 @@ import { RowRadioButtonsGroup } from '../../components/survey-item/survey-item';
 import { InputEmailField } from '../../components/input-email-field/input-email-field';
 import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
+import { ConfirmModal } from '../../components/modal/modal';
+
+import { VideoRecorder } from '../../services/video-recorder';
+import { VideoPlayer } from '../../services/video-player';
 
 import { useState } from 'react';
 import { Container, Button, Stack } from '@mui/material';
@@ -20,6 +24,8 @@ export function SurveyPage() {
 
     return (
         <Container>
+            {VideoRecorder()}
+            <VideoPlayer />
             <Header />
             <RowRadioButtonsGroup title="1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน" />
             <RowRadioButtonsGroup title="2. ไม่สบายใจ ซึมเศร้า หรือท้อแท้" />
@@ -48,8 +54,8 @@ export function SurveyPage() {
                     ส่งคำตอบ
                 </Button>
                 <FooterTextPaper />
-
             </Stack>
+            <ConfirmModal open={true} />
         </Container>
     );
 }
