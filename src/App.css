@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+.video-player {
+  display: none;
+}
+
+.video-modal {
+  display: contents;
+}
+
 * {
   font-size: 100%;
   font-family: 'Prompt', sans-serif !important;

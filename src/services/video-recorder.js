@@ -20,39 +20,38 @@ export const VideoRecorder = () => {
         });
     }
 
-    window.onload = function () {
-        var video = document.createElement('video');
-        var canvas = document.createElement('canvas');
-        var context = canvas.getContext('2d');
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    const video = document.querySelector("#videoElement");
 
-        if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function (stream) {
-                    video.srcObject = stream;
-                    console.log("stream ", stream)
-                })
-                .catch(function (e) {
-                    console.log(e)
-                });
-        }
-
-        const FPS = 25;
-        setInterval(() => {
-            var width = 400;
-            var height = 300;
-            context.drawImage(video, 0, 0, width, height);
-            var imageBase64 = canvas.toDataURL("image/jpeg").split(';base64,')[1];
-            context.clearRect(0, 0, width, height);
-            var data = {
-                imageBase64: imageBase64,
-                timeStamp: Math.floor(new Date().getTime() / 1000),
-                user_email: "email@gmail.com",
-                user_id: "1"
-            }
-            console.log("data ", data)
-            socket.emit('image', data);
-        }, 1000 / FPS);
+    console.log(navigator.mediaDevices.getUserMedia)
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function (stream) {
+                video.srcObject = stream;
+                console.log("stream ", stream)
+            })
+            .catch(function (e) {
+                console.log(e)
+            });
     }
+
+    const FPS = 25;
+    setInterval(() => {
+        var width = 400;
+        var height = 300;
+        context.drawImage(video, 0, 0, width, height);
+        var imageBase64 = canvas.toDataURL("image/jpeg").split(';base64,')[1];
+        context.clearRect(0, 0, width, height);
+        var data = {
+            imageBase64: imageBase64,
+            timeStamp: Math.floor(new Date().getTime() / 1000),
+            user_email: "email@gmail.com",
+            user_id: "1"
+        }
+        console.log("data ", data)
+        socket.emit('image', data);
+    }, 1000 / FPS);
 }
 
 export function socketDisconnect() {

@@ -9,7 +9,7 @@ import { ConfirmModal } from '../../components/modal/modal';
 import { VideoRecorder } from '../../services/video-recorder';
 import { VideoPlayer } from '../../services/video-player';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Button, Stack } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
@@ -22,10 +22,13 @@ export function SurveyPage() {
         console.log(`${email} ${isValidEmail}`);
     }
 
+    useEffect(() => {
+        VideoRecorder()
+    }, [])
+
     return (
         <Container>
-            {VideoRecorder()}
-            <VideoPlayer />
+            <VideoPlayer className="video-player" />
             <Header />
             <RowRadioButtonsGroup title="1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน" />
             <RowRadioButtonsGroup title="2. ไม่สบายใจ ซึมเศร้า หรือท้อแท้" />
