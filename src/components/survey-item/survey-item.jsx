@@ -4,12 +4,11 @@ import { styles } from './survey-item-styles';
 import { useEffect, useState } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import { styled } from "@mui/material/styles";
+
+import { StyledFormControlLabel, StyledCardContent } from './survey-item-component';
 
 
 export function RowRadioButtonsGroup(props) {
@@ -20,31 +19,6 @@ export function RowRadioButtonsGroup(props) {
     useEffect(() => {
         setIndex(props.index);
     }, [index, props.index]);
-
-    const StyledFormControlLabel = styled((props) => (
-        <FormControlLabel {...props} />
-    ))(({ _, checked }) => ({
-        ".MuiFormControlLabel-label": checked && {
-            color: "#1976d2",
-            fontWeight: "bold",
-            fontSize: '20px',
-        }
-    }));
-
-    const StyledCardContent = styled((props) => (
-        <CardContent {...props} />
-    ))(({ _ }) => ({
-        ".MuiCardContent-root": {
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
-            borderRadius: "12px",
-            backgroundColor: "rgba(255,255,255,0.5)",
-            "&:hover": {
-                backgroundColor: 'rgba(255,255,255,0.9)',
-            }
-        }
-    }));
 
     const MyFormControlLabel = (props) => {
         const radioGroup = useRadioGroup();
