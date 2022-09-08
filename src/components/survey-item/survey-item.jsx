@@ -1,7 +1,7 @@
 import './survey-item.css';
 import { styles } from './survey-item-styles';
 
-import * as React from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -13,6 +13,13 @@ import { styled } from "@mui/material/styles";
 
 
 export function RowRadioButtonsGroup(props) {
+
+    const [index, setIndex] = useState(0);
+    const radioGroupRef = useRef(null);
+
+    useEffect(() => {
+        setIndex(props.index);
+    }, [index, props.index]);
 
     const StyledFormControlLabel = styled((props) => (
         <FormControlLabel {...props} />
@@ -39,13 +46,13 @@ export function RowRadioButtonsGroup(props) {
         }
     }));
 
-    function MyFormControlLabel(props) {
+    const MyFormControlLabel = (props) => {
         const radioGroup = useRadioGroup();
 
         let checked = false;
 
         if (radioGroup) {
-            checked = radioGroup.value === props.value;
+            checked = String(radioGroup.value) === String(props.value);
         }
 
         return <StyledFormControlLabel checked={checked} {...props} />;
@@ -65,11 +72,13 @@ export function RowRadioButtonsGroup(props) {
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
+                                ref={radioGroupRef}
+                                onChange={(_, value) => props.onRadioChange(index, value)}
                             >
-                                <MyFormControlLabel labelPlacement="top" value="0" control={<Radio />} label="0" />
-                                <MyFormControlLabel labelPlacement="top" value="1" control={<Radio />} label="1" />
-                                <MyFormControlLabel labelPlacement="top" value="2" control={<Radio />} label="2" />
-                                <MyFormControlLabel labelPlacement="top" value="3" control={<Radio />} label="3" />
+                                <MyFormControlLabel labelPlacement="top" value={0} control={<Radio />} label="0" />
+                                <MyFormControlLabel labelPlacement="top" value={1} control={<Radio />} label="1" />
+                                <MyFormControlLabel labelPlacement="top" value={2} control={<Radio />} label="2" />
+                                <MyFormControlLabel labelPlacement="top" value={3} control={<Radio />} label="3" />
                             </RadioGroup>
                         </FormControl>
                     </Grid2>

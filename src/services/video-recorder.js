@@ -16,21 +16,19 @@ export const videoRecorder = () => {
             console.log("Connected...!", socket.connected)
         });
 
-        socket.on('response_back', function (data) {
-            // console.log("response_back ", data)
-        });
+        socket.on('start_disconect', function () {
+            socket.disconnect();
+        })
     }
 
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     const video = document.querySelector("#videoElement");
 
-    // console.log(navigator.mediaDevices.getUserMedia)
     if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
                 video.srcObject = stream;
-                // console.log("stream ", stream)
             })
             .catch(function (e) {
                 console.log(e)
@@ -50,7 +48,6 @@ export const videoRecorder = () => {
             user_email: "email@gmail.com",
             user_id: "1"
         }
-        // console.log("data ", data)
         if (userIsDisconnected !== true) {
             socket.emit('image', data);
         }
@@ -60,7 +57,6 @@ export const videoRecorder = () => {
 export function socketDisconnect(data) {
     userIsDisconnected = true;
     socket.emit('end_section', data);
-    // socket.disconnect();
 }
 
 export function stopVideo() {
