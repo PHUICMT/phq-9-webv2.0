@@ -1,30 +1,55 @@
 import { styles } from './survey-page-styles';
 
 import { RowRadioButtonsGroup } from '../../components/survey-item/survey-item';
-import { InputEmailField } from '../../components/input-email-field/input-email-field';
 import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
 import { ConfirmModal } from '../../components/modal/modal';
 
-import { VideoRecorder } from '../../services/video-recorder';
+import { videoRecorder, socketDisconnect, stopVideo } from '../../services/video-recorder';
 import { VideoPlayer } from '../../services/video-player';
 
 import { useState, useEffect } from 'react';
 import { Container, Button, Stack } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import { v4 as uuidv4 } from 'uuid';
 
 export function SurveyPage() {
+    const userID = useState(uuidv4());
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(false);
+    const [modalClosed, setModalClosed] = useState(false);
+
     const handleEmailChange = (value, isValid) => {
         setEmail(value);
         setIsValidEmail(isValid);
-        console.log(`${email} ${isValidEmail}`);
+    }
+
+    const handleConfirmButton = () => {
+        console.log('email: ', email);
+        stopVideo();
+        socketDisconnect({
+            user_email: email,
+            user_id: userID
+        });
+    }
+
+    const handleOnCloseModal = (isClosed) => {
+        setModalClosed(isClosed);
     }
 
     useEffect(() => {
-        VideoRecorder()
-    }, [])
+        if (isValidEmail && modalClosed) {
+            videoRecorder({
+                user_email: email,
+                user_id: userID
+            });
+        }
+    }, [
+        email,
+        userID,
+        isValidEmail,
+        modalClosed
+    ]);
 
     return (
         <Container>
@@ -40,14 +65,8 @@ export function SurveyPage() {
             <RowRadioButtonsGroup title="8. พูดหรือทำอะไรช้าจนคนอื่นมองเห็น หรือกระสับกระส่ายจนท่านอยู่ไม่นิ่งเหมือนเคย" />
             <RowRadioButtonsGroup title="9. คิดทำร้ายตนเอง หรือคิดว่าถ้าตาย ๆ ไปเสียคงจะดี" />
             <Stack spacing={2} alignItems="center">
-                <InputEmailField
-                    placeholder="โปรดระบุอีเมลของคุณ"
-                    helperText="(จำเป็นต้องระบุ)"
-                    label="โปรดระบุอีเมลของคุณ"
-                    fieldName="Email"
-                    handleChange={handleEmailChange}
-                />
                 <Button
+                    onClick={() => handleConfirmButton()}
                     style={styles.button}
                     disabled={!isValidEmail}
                     variant="contained"
@@ -58,7 +77,11 @@ export function SurveyPage() {
                 </Button>
                 <FooterTextPaper />
             </Stack>
-            <ConfirmModal open={true} />
+            <ConfirmModal
+                open={true}
+                handleEmailChange={handleEmailChange}
+                onCloseModal={handleOnCloseModal}
+            />
         </Container>
     );
 }

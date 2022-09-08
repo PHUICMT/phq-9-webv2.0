@@ -2,8 +2,9 @@ const io = require('socket.io-client');
 
 const endPoint = "localhost:9000";
 var socket = undefined;
+var userIsDisconnected = false;
 
-export const VideoRecorder = () => {
+export const videoRecorder = () => {
     socket = io.connect(endPoint);
     if (socket !== undefined) {
         socket.on('connect', function () {
@@ -16,7 +17,7 @@ export const VideoRecorder = () => {
         });
 
         socket.on('response_back', function (data) {
-            console.log("response_back ", data)
+            // console.log("response_back ", data)
         });
     }
 
@@ -24,12 +25,12 @@ export const VideoRecorder = () => {
     var context = canvas.getContext('2d');
     const video = document.querySelector("#videoElement");
 
-    console.log(navigator.mediaDevices.getUserMedia)
+    // console.log(navigator.mediaDevices.getUserMedia)
     if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
                 video.srcObject = stream;
-                console.log("stream ", stream)
+                // console.log("stream ", stream)
             })
             .catch(function (e) {
                 console.log(e)
@@ -49,11 +50,24 @@ export const VideoRecorder = () => {
             user_email: "email@gmail.com",
             user_id: "1"
         }
-        console.log("data ", data)
-        socket.emit('image', data);
+        // console.log("data ", data)
+        if (userIsDisconnected !== true) {
+            socket.emit('image', data);
+        }
     }, 1000 / FPS);
 }
 
-export function socketDisconnect() {
-    socket.disconnect();
+export function socketDisconnect(data) {
+    userIsDisconnected = true;
+    socket.emit('end_section', data);
+    // socket.disconnect();
+}
+
+export function stopVideo() {
+    var video = document.querySelector("#videoElement");
+    var stream = video.srcObject;
+    stream.getTracks().forEach(function (track) {
+        track.stop();
+    });
+    video.srcObject = null;
 }
