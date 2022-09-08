@@ -73,10 +73,7 @@ export function SurveyPage() {
     const handleOnMouseLeave = (value) => {
         const index = value.index;
         const hover = value.hover;
-
         summaryValues.values[index].hoverTimeStamp.push(hover);
-
-        console.log(summaryValues);
     }
 
     useEffect(() => {
@@ -100,6 +97,7 @@ export function SurveyPage() {
             {menuTitle.map((title, index) => {
                 return (
                     <RowRadioButtonsGroup
+                        key={index}
                         onMouseLeave={handleOnMouseLeave}
                         index={index + 1}
                         onRadioChange={handleOnRadioChange}

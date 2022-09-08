@@ -1,7 +1,7 @@
 import './survey-item.css';
 import { styles } from './survey-item-styles';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -13,9 +13,9 @@ import { styled } from "@mui/material/styles";
 
 
 export function RowRadioButtonsGroup(props) {
-
     const [index, setIndex] = useState(0);
     const [hoverStart, setHoverStart] = useState(0);
+    const [radioValue, setRadioValue] = useState(-1);
 
     useEffect(() => {
         setIndex(props.index);
@@ -48,14 +48,16 @@ export function RowRadioButtonsGroup(props) {
 
     const MyFormControlLabel = (props) => {
         const radioGroup = useRadioGroup();
-
         let checked = false;
-
         if (radioGroup) {
-            checked = String(radioGroup.value) === String(props.value);
+            checked = String(radioValue) === String(props.value);
         }
-
         return <StyledFormControlLabel checked={checked} {...props} />;
+    }
+
+    const handleOnRadioChange = (_, value) => {
+        setRadioValue(value);
+        props.onRadioChange(index, value)
     }
 
     const getCurrentTime = () => {
@@ -96,7 +98,7 @@ export function RowRadioButtonsGroup(props) {
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
-                                    onChange={(_, value) => props.onRadioChange(index, value)}
+                                    onChange={handleOnRadioChange}
                                 >
                                     <MyFormControlLabel labelPlacement="top" value={0} control={<Radio />} label="0" />
                                     <MyFormControlLabel labelPlacement="top" value={1} control={<Radio />} label="1" />
