@@ -18,6 +18,17 @@ export function SurveyPage() {
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [modalClosed, setModalClosed] = useState(false);
+    const menuTitle = [
+        "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
+        "2. ไม่สบายใจ ซึมเศร้า หรือท้อแท้",
+        "3. หลับยาก หรือหลับ ๆ ตื่น ๆ หรือหลับมากไป",
+        "4. เหนื่อยง่าย หรือไม่ค่อยมีแรง",
+        "5. เบื่ออาหาร หรือกินมากเกินไป",
+        "6. รู้สึกไม่ดีกับตัวเอง คิดว่าตัวเองล้มเหลว หรือเป็นคนทำให้ตัวเอง หรือครอบครัวผิดหวัง",
+        "7. สมาธิไม่ดีเวลาทำอะไร เช่น ดูโทรทัศน์ ฟังวิทยุ หรือทำงานที่ต้องใช้ความตั้งใจ",
+        "8. พูดหรือทำอะไรช้าจนคนอื่นมองเห็น หรือกระสับกระส่ายจนท่านอยู่ไม่นิ่งเหมือนเคย",
+        "9. คิดทำร้ายตนเอง หรือคิดว่าถ้าตาย ๆ ไปเสียคงจะดี"
+    ]
 
     let summaryValues = {
         values: {
@@ -59,6 +70,14 @@ export function SurveyPage() {
         }
     }
 
+    const handleOnMouseLeave = (value) => {
+        const index = value.index;
+        const hover = value.hover;
+
+        summaryValues.values[index].hoverTimeStamp.push(hover);
+
+        console.log(summaryValues);
+    }
 
     useEffect(() => {
         if (isValidEmail && modalClosed) {
@@ -78,15 +97,18 @@ export function SurveyPage() {
         <Container>
             <VideoPlayer className="video-player" />
             <Header />
-            <RowRadioButtonsGroup index={1} onRadioChange={handleOnRadioChange} title="1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน" />
-            <RowRadioButtonsGroup index={2} onRadioChange={handleOnRadioChange} title="2. ไม่สบายใจ ซึมเศร้า หรือท้อแท้" />
-            <RowRadioButtonsGroup index={3} onRadioChange={handleOnRadioChange} title="3. หลับยาก หรือหลับ ๆ ตื่น ๆ หรือหลับมากไป" />
-            <RowRadioButtonsGroup index={4} onRadioChange={handleOnRadioChange} title="4. เหนื่อยง่าย หรือไม่ค่อยมีแรง" />
-            <RowRadioButtonsGroup index={5} onRadioChange={handleOnRadioChange} title="5. เบื่ออาหาร หรือกินมากเกินไป" />
-            <RowRadioButtonsGroup index={6} onRadioChange={handleOnRadioChange} title="6. รู้สึกไม่ดีกับตัวเอง คิดว่าตัวเองล้มเหลว หรือเป็นคนทำให้ตัวเอง หรือครอบครัวผิดหวัง" />
-            <RowRadioButtonsGroup index={7} onRadioChange={handleOnRadioChange} title="7. สมาธิไม่ดีเวลาทำอะไร เช่น ดูโทรทัศน์ ฟังวิทยุ หรือทำงานที่ต้องใช้ความตั้งใจ" />
-            <RowRadioButtonsGroup index={8} onRadioChange={handleOnRadioChange} title="8. พูดหรือทำอะไรช้าจนคนอื่นมองเห็น หรือกระสับกระส่ายจนท่านอยู่ไม่นิ่งเหมือนเคย" />
-            <RowRadioButtonsGroup index={9} onRadioChange={handleOnRadioChange} title="9. คิดทำร้ายตนเอง หรือคิดว่าถ้าตาย ๆ ไปเสียคงจะดี" />
+            {menuTitle.map((title, index) => {
+                return (
+                    <RowRadioButtonsGroup
+                        onMouseLeave={handleOnMouseLeave}
+                        index={index + 1}
+                        onRadioChange={handleOnRadioChange}
+                        title={title}
+                    />
+
+                )
+            })
+            }
             <Stack spacing={2} alignItems="center">
                 <Button
                     onClick={() => handleConfirmButton()}

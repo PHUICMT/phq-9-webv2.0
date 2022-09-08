@@ -1,7 +1,7 @@
 import './survey-item.css';
 import { styles } from './survey-item-styles';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -15,7 +15,7 @@ import { styled } from "@mui/material/styles";
 export function RowRadioButtonsGroup(props) {
 
     const [index, setIndex] = useState(0);
-    const radioGroupRef = useRef(null);
+    const [hoverStart, setHoverStart] = useState(0);
 
     useEffect(() => {
         setIndex(props.index);
@@ -58,32 +58,56 @@ export function RowRadioButtonsGroup(props) {
         return <StyledFormControlLabel checked={checked} {...props} />;
     }
 
-    return (
-        <StyledCardContent className="survey-content">
-            <StyledCardContent className="survey-item">
-                <Grid2 container spacing={2}>
-                    <Grid2 xs={8} style={styles.typography}>
-                        <Typography id="demo-row-radio-buttons-group-label">{props.title}</Typography>
+    const getCurrentTime = () => {
+        return Math.round((new Date()).getTime() / 1000);
+    }
 
+    const handleOnMouseEnter = () => {
+        setHoverStart(
+            getCurrentTime()
+        );
+    }
+
+    const handleOnMouseLeave = () => {
+        const value = {
+            index: index,
+            hover: {
+                start: hoverStart,
+                end: getCurrentTime()
+            }
+        }
+        props.onMouseLeave(value);
+    };
+
+    return (
+        <div
+            onMouseEnter={handleOnMouseEnter}
+            onMouseLeave={handleOnMouseLeave}
+        >
+            <StyledCardContent className="survey-content">
+                <StyledCardContent className="survey-item">
+                    <Grid2 container spacing={2}>
+                        <Grid2 xs={8} style={styles.typography}>
+                            <Typography id="demo-row-radio-buttons-group-label">{props.title}</Typography>
+                        </Grid2>
+                        <Grid2 xs>
+                            <FormControl>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-row-radio-buttons-group-label"
+                                    name="row-radio-buttons-group"
+                                    onChange={(_, value) => props.onRadioChange(index, value)}
+                                >
+                                    <MyFormControlLabel labelPlacement="top" value={0} control={<Radio />} label="0" />
+                                    <MyFormControlLabel labelPlacement="top" value={1} control={<Radio />} label="1" />
+                                    <MyFormControlLabel labelPlacement="top" value={2} control={<Radio />} label="2" />
+                                    <MyFormControlLabel labelPlacement="top" value={3} control={<Radio />} label="3" />
+                                </RadioGroup>
+                            </FormControl>
+                        </Grid2>
                     </Grid2>
-                    <Grid2 xs>
-                        <FormControl>
-                            <RadioGroup
-                                row
-                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                name="row-radio-buttons-group"
-                                ref={radioGroupRef}
-                                onChange={(_, value) => props.onRadioChange(index, value)}
-                            >
-                                <MyFormControlLabel labelPlacement="top" value={0} control={<Radio />} label="0" />
-                                <MyFormControlLabel labelPlacement="top" value={1} control={<Radio />} label="1" />
-                                <MyFormControlLabel labelPlacement="top" value={2} control={<Radio />} label="2" />
-                                <MyFormControlLabel labelPlacement="top" value={3} control={<Radio />} label="3" />
-                            </RadioGroup>
-                        </FormControl>
-                    </Grid2>
-                </Grid2>
+                </StyledCardContent>
             </StyledCardContent>
-        </StyledCardContent>
+        </div >
     );
 }
