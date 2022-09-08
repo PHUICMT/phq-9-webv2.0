@@ -50,7 +50,8 @@ export function RowRadioButtonsGroup(props) {
             hover: {
                 start: hoverStart,
                 end: getCurrentTime()
-            }
+            },
+            totalTime: getCurrentTime() - hoverStart
         }
         props.onMouseLeave(value);
     };

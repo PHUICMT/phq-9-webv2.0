@@ -32,18 +32,17 @@ export function SurveyPage() {
 
     let summaryValues = {
         values: {
-            1: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            2: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            3: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            4: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            5: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            6: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            7: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            8: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
-            9: { checkedValue: -1, hoverTime: -1, isChanged: false, hoverTimeStamp: [] },
+            1: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            2: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            3: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            4: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            5: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            6: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            7: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            8: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
+            9: { checkedValue: -1, hoverTime: 0, isChanged: false, hoverTimeStamp: [] },
         }
     }
-
 
     const handleEmailChange = (value, isValid) => {
         setEmail(value);
@@ -73,7 +72,9 @@ export function SurveyPage() {
     const handleOnMouseLeave = (value) => {
         const index = value.index;
         const hover = value.hover;
+        const totalTime = value.totalTime;
         summaryValues.values[index].hoverTimeStamp.push(hover);
+        summaryValues.values[index].hoverTime += totalTime;
     }
 
     useEffect(() => {
