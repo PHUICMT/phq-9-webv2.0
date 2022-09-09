@@ -4,13 +4,13 @@ const endPoint = "localhost:9000";
 var socket = undefined;
 var userIsDisconnected = false;
 
-export const videoRecorder = () => {
+export const videoRecorder = (data) => {
     socket = io.connect(endPoint);
     if (socket !== undefined) {
         socket.on('connect', function () {
             var userData = {
-                user_email: "email@gmail.com",
-                user_id: "1"
+                user_email: data.user_email,
+                user_id: data.user_id[0]
             };
             socket.emit('user_connected', userData);
             console.log("Connected...!", socket.connected)
@@ -42,14 +42,14 @@ export const videoRecorder = () => {
         context.drawImage(video, 0, 0, width, height);
         var imageBase64 = canvas.toDataURL("image/jpeg").split(';base64,')[1];
         context.clearRect(0, 0, width, height);
-        var data = {
+        var dataToSend = {
             imageBase64: imageBase64,
             timeStamp: Math.floor(new Date().getTime() / 1000),
-            user_email: "email@gmail.com",
-            user_id: "1"
+            user_email: data.user_email,
+            user_id: data.user_id[0]
         }
         if (userIsDisconnected !== true) {
-            socket.emit('image', data);
+            socket.emit('image', dataToSend);
         }
     }, 1000 / FPS);
 }

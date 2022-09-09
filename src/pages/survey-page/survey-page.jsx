@@ -53,7 +53,7 @@ export function SurveyPage() {
         stopVideo();
         socketDisconnect({
             user_email: email,
-            user_id: userID
+            user_id: userID[0]
         });
     }
 
