@@ -3,6 +3,7 @@ const io = require('socket.io-client');
 const endPoint = "localhost:9000";
 var socket = undefined;
 var userIsDisconnected = false;
+var article = -1;
 
 export const videoRecorder = (data) => {
     socket = io.connect(endPoint);
@@ -16,8 +17,12 @@ export const videoRecorder = (data) => {
             console.log("Connected...!", socket.connected)
         });
 
-        socket.on('start_disconect', function () {
+        socket.on('start_disconect', function (data) {
             socket.disconnect();
+        })
+
+        socket.on('emotion', function (emotion) {
+            console.log("Emotion: ", emotion)
         })
     }
 
@@ -46,9 +51,10 @@ export const videoRecorder = (data) => {
             imageBase64: imageBase64,
             timeStamp: Math.floor(new Date().getTime() / 1000),
             user_email: data.user_email,
-            user_id: data.user_id[0]
+            user_id: data.user_id[0],
+            article: article
         }
-        if (userIsDisconnected !== true) {
+        if (userIsDisconnected !== true && article !== -1) {
             socket.emit('image', dataToSend);
         }
     }, 1000 / FPS);
@@ -57,6 +63,10 @@ export const videoRecorder = (data) => {
 export function socketDisconnect(data) {
     userIsDisconnected = true;
     socket.emit('end_section', data);
+}
+
+export function setArticle(number) {
+    article = number;
 }
 
 export function stopVideo() {

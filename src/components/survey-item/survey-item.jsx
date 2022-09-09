@@ -42,6 +42,7 @@ export function RowRadioButtonsGroup(props) {
         setHoverStart(
             getCurrentTime()
         );
+        props.onMouseEnter(index);
     }
 
     const handleOnMouseLeave = () => {

@@ -39,9 +39,6 @@ BootstrapDialogTitle.propTypes = {
 
 export function ConfirmModal(props) {
     const [open, setOpen] = useState(false);
-    const [isValidEmail, setIsValidEmail] = useState(false);
-
-
 
     useEffect(() => {
         setOpen(props.open);
@@ -51,11 +48,6 @@ export function ConfirmModal(props) {
         setOpen(false);
         props.onCloseModal(true);
     };
-
-    const handleEmailChange = (value, isValid) => {
-        setIsValidEmail(isValid);
-        props.handleEmailChange(value, isValid);
-    }
 
     return (
         <div>
@@ -75,13 +67,12 @@ export function ConfirmModal(props) {
                         helperText="(จำเป็นต้องระบุ)"
                         label="โปรดระบุอีเมลของคุณ"
                         fieldName="Email"
-                        handleChange={handleEmailChange}
+                        handleChange={props.handleEmailChange}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button
                         onClick={handleClose}
-                        disabled={!isValidEmail}
                         size="large"
                         variant="contained"
                     >

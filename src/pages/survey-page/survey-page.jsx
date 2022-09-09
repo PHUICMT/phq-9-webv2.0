@@ -5,7 +5,7 @@ import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
 import { ConfirmModal } from '../../components/modal/modal';
 
-import { videoRecorder, socketDisconnect, stopVideo } from '../../services/video-recorder';
+import { videoRecorder, socketDisconnect, stopVideo, setArticle } from '../../services/video-recorder';
 import { VideoPlayer } from '../../services/video-player';
 
 import { useState, useEffect } from 'react';
@@ -16,7 +16,6 @@ import { v4 as uuidv4 } from 'uuid';
 export function SurveyPage() {
     const userID = useState(uuidv4());
     const [email, setEmail] = useState('');
-    const [isValidEmail, setIsValidEmail] = useState(false);
     const [modalClosed, setModalClosed] = useState(false);
     const menuTitle = [
         "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
@@ -44,9 +43,8 @@ export function SurveyPage() {
         }
     }
 
-    const handleEmailChange = (value, isValid) => {
+    const handleEmailChange = (value, _) => {
         setEmail(value);
-        setIsValidEmail(isValid);
     }
 
     const handleConfirmButton = () => {
@@ -78,7 +76,7 @@ export function SurveyPage() {
     }
 
     useEffect(() => {
-        if (isValidEmail && modalClosed) {
+        if (modalClosed) {
             videoRecorder({
                 user_email: email,
                 user_id: userID
@@ -87,7 +85,6 @@ export function SurveyPage() {
     }, [
         email,
         userID,
-        isValidEmail,
         modalClosed
     ]);
 
@@ -99,6 +96,7 @@ export function SurveyPage() {
                 return (
                     <RowRadioButtonsGroup
                         key={index}
+                        onMouseEnter={setArticle}
                         onMouseLeave={handleOnMouseLeave}
                         index={index + 1}
                         onRadioChange={handleOnRadioChange}
@@ -112,7 +110,6 @@ export function SurveyPage() {
                 <Button
                     onClick={() => handleConfirmButton()}
                     style={styles.button}
-                    disabled={!isValidEmail}
                     variant="contained"
                     size="large"
                     endIcon={<SendIcon />}
