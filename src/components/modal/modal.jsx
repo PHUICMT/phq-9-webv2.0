@@ -62,6 +62,7 @@ export function ConfirmModal(props) {
                 </BootstrapDialogTitle>
                 <DialogContent dividers className='modal-content'>
                     <VideoPlayer className="video-modal" isModal={true} />
+                    {/* TODO Remove Email Field */}
                     <InputEmailField
                         placeholder="โปรดระบุอีเมลของคุณ"
                         helperText="(จำเป็นต้องระบุ)"
@@ -69,6 +70,7 @@ export function ConfirmModal(props) {
                         fieldName="Email"
                         handleChange={props.handleEmailChange}
                     />
+                    {/* TODO Add  Check box User type*/}
                 </DialogContent>
                 <DialogActions>
                     <Button
