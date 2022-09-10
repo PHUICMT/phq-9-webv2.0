@@ -5,7 +5,7 @@ import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
 import { ConfirmModal } from '../../components/modal/modal';
 
-import { videoRecorder, socketDisconnect, stopVideo, setArticle } from '../../services/video-recorder';
+import { videoRecorder, socketDisconnect, stopVideo, setArticle, setEmoteResult } from '../../services/video-recorder';
 import { VideoPlayer } from '../../services/video-player';
 
 import { useState, useEffect } from 'react';
@@ -31,15 +31,15 @@ export function SurveyPage() {
 
     let summaryValues = {
         values: {
-            1: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            2: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            3: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            4: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            5: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            6: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            7: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            8: { checkedValue: -1, hoverTime: 0, isChanged: false },
-            9: { checkedValue: -1, hoverTime: 0, isChanged: false },
+            1: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            2: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            3: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            4: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            5: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            6: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            7: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            8: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            9: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
         }
     }
 
@@ -49,6 +49,7 @@ export function SurveyPage() {
 
     const handleConfirmButton = () => {
         stopVideo();
+        setEmoteResult(summaryValues.values);
         socketDisconnect({
             user_email: email,
             user_id: userID[0]
@@ -63,7 +64,15 @@ export function SurveyPage() {
         let oldValue = summaryValues.values[index].checkedValue;
         summaryValues.values[index].checkedValue = value;
         if (oldValue !== -1) {
-            summaryValues.values[index].isChanged = true;
+            summaryValues.values[index].behaver.change = true;
+        }
+
+        for (const [key, value] of Object.entries(summaryValues.values)) {
+            const keyIndex = key + 1
+            if (keyIndex < index && value.checkedValue !== -1) {
+                summaryValues.values[index].behaver.skip = true
+            }
+            return
         }
     }
 
@@ -71,6 +80,11 @@ export function SurveyPage() {
         const index = value.index;
         const totalTime = value.totalTime;
         summaryValues.values[index].hoverTime += totalTime;
+
+        const currentTimeValue = summaryValues.values[index].hoverTime;
+        if (currentTimeValue > 60) {
+            summaryValues.values[index].behaver.over = true;
+        }
     }
 
     useEffect(() => {

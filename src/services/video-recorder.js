@@ -81,9 +81,13 @@ export function setArticle(number) {
 export function stopVideo() {
     var video = document.querySelector("#videoElement");
     var stream = video.srcObject;
-    stream.getTracks().forEach(function (track) {
-        track.stop();
-    });
+    try {
+        stream.getTracks().forEach(function (track) {
+            track.stop();
+        });
+    } catch (e) {
+        console.log("[INFO] No video stream to stop");
+    }
     video.srcObject = null;
 }
 
@@ -91,6 +95,22 @@ function resolveEmotion(emotion) {
     return new Promise(resolve => {
         for (const [key, value] of Object.entries(emotion)) {
             emotion_result_table[Number(key)].emotion = value;
+        }
+        resolve("Success");
+    });
+}
+
+export async function setEmoteResult(emotion_result) {
+    const status = await resolveEmotionResult(emotion_result);
+    console.log(status);
+}
+
+function resolveEmotionResult(emotion) {
+    return new Promise(resolve => {
+        for (const [key, value] of Object.entries(emotion)) {
+            emotion_result_table[Number(key)].reaction_time = value.hoverTime;
+            emotion_result_table[Number(key)].score = value.checkedValue;
+            emotion_result_table[Number(key)].behaver = value.behaver;
         }
         resolve("Success");
     });
