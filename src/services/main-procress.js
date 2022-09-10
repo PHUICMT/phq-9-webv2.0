@@ -36,7 +36,7 @@ export const videoRecorder = (data) => {
 
         socket.on('emotion', async function (emotion) {
             const status = await resolveEmotion(emotion);
-            console.log(status);
+            console.log("resolveEmotion : ", status);
             console.log("Emotion Result Table: ", emotion_result_table);
         });
     }
