@@ -29,12 +29,16 @@ const rows = [
 ];
 
 const showEmotionIcon = (emotePerQuestion) => {
+    const fear = emotePerQuestion["fear"]
+    const happy = emotePerQuestion["happy"]
+    const sad = emotePerQuestion["sad"]
+    const neutral = emotePerQuestion["neutral"]
     return (
         <div className="emote-group-table">
-            {emotePerQuestion[0] ? <img alt='Fear' src={Fear} /> : <div />}
-            {emotePerQuestion[1] ? <img alt='Happy' src={Happy} /> : <div />}
-            {emotePerQuestion[2] ? <img alt='Sad' src={Sad} /> : <div />}
-            {emotePerQuestion[3] ? <img alt='Neutral' src={Neutral} /> : <div />}
+            {fear > 0 ? <div><img alt='Fear' src={Fear} /> <p>{fear}%</p></div> : <div />}
+            {happy > 0 ? <div><img alt='Happy' src={Happy} /> <p>{happy}%</p></div> : <div />}
+            {sad > 0 ? <div><img alt='Sad' src={Sad} /> <p>{sad}%</p></div> : <div />}
+            {neutral > 0 ? <div><img alt='Neutral' src={Neutral} /> <p>{neutral}%</p></div> : <div />}
         </div >
     );
 }
