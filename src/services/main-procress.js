@@ -137,3 +137,10 @@ export function setUserType(userType) {
     }
     display_info.user_type[userType] = true;
 }
+
+export function getReportInfo() {
+    return {
+        display_info: display_info,
+        emotion_result_table: emotion_result_table
+    };
+}

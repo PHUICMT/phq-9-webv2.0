@@ -3,7 +3,7 @@ import { styles } from './survey-page-styles';
 import { RowRadioButtonsGroup } from '../../components/survey-item/survey-item';
 import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
-import { ConfirmModal } from '../../components/modal/modal';
+import { ConfirmModal, ReportModal } from '../../components/modal/modal';
 
 import {
     videoRecorder,
@@ -12,7 +12,8 @@ import {
     setArticle,
     setEmoteResult,
     setSubmitButton,
-    setUserType
+    setUserType,
+    getReportInfo
 } from '../../services/main-procress';
 import { VideoPlayer } from '../../services/video-player';
 
@@ -24,6 +25,8 @@ import { v4 as uuidv4 } from 'uuid';
 export function SurveyPage() {
     const userID = useState(uuidv4());
     const [modalClosed, setModalClosed] = useState(false);
+    const [reportData, setReportData] = useState({});
+
     const menuTitle = [
         "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
         "2. ไม่สบายใจ ซึมเศร้า หรือท้อแท้",
@@ -56,6 +59,9 @@ export function SurveyPage() {
         setEmoteResult(summaryValues.values);
         socketDisconnect({
             user_id: userID[0]
+        });
+        getReportInfo().then((data) => {
+            setReportData(data);
         });
     }
 
@@ -135,6 +141,10 @@ export function SurveyPage() {
                 open={true}
                 onCloseModal={handleOnCloseModal}
                 onUserTypeChange={setUserType}
+            />
+            <ReportModal
+                open={false}
+                reportData={reportData}
             />
         </Container>
     );

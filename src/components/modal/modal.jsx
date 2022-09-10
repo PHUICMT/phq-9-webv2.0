@@ -9,8 +9,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import { Download } from '@mui/icons-material';
 
-import { UserTypeRadioButtonsGroup } from '../../components/user-type-radio/user-type-radio';
+import { EmoteReportTable } from '../report-popup/report-popup';
+import { UserTypeRadioButtonsGroup } from '../user-type-radio/user-type-radio';
 
 import { VideoPlayer } from '../../services/video-player';
 
@@ -79,6 +81,49 @@ export function ConfirmModal(props) {
                         disabled={!validUserType}
                     >
                         เริ่มทดสอบ
+                    </Button>
+                </DialogActions>
+            </BootstrapDialog>
+        </div>
+    );
+}
+
+export function ReportModal(props) {
+    const [open, setOpen] = useState(false);
+    const [reportData, setReportData] = useState({});
+
+    useEffect(() => {
+        setOpen(props.open);
+        setReportData(props.reportData);
+    }, [props.open, props.reportData]);
+
+    const handleClose = () => {
+        setOpen(false);
+        props.onCloseModal(true);
+    };
+
+    return (
+        <div>
+            <BootstrapDialog
+                aria-labelledby="customized-dialog-title"
+                open={open}
+            >
+                <BootstrapDialogTitle
+                    id="customized-dialog-title"
+                >
+                    ผลการทดสอบ
+                </BootstrapDialogTitle>
+                <DialogContent dividers className='modal-content'>
+                    {/* Report Here */}
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={handleClose}
+                        size="large"
+                        variant="contained"
+                        endIcon={<Download />}
+                    >
+                        ดาวน์โหลดรายงาน
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
