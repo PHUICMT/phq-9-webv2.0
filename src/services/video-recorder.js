@@ -15,8 +15,14 @@ var emotion_result_table = {
     8: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
     9: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
 }
+var display_info = {
+    id: "0000",
+    is_submit: false,
+    user_type: { normal: false, depressed: false, being_treated: false },
+}
 
 export const videoRecorder = (data) => {
+    display_info.id = data.user_id[0];
     socket = io.connect(endPoint);
     if (socket !== undefined) {
         socket.on('connect', function () {
@@ -102,7 +108,7 @@ function resolveEmotion(emotion) {
 
 export async function setEmoteResult(emotion_result) {
     const status = await resolveEmotionResult(emotion_result);
-    console.log(status);
+    console.log("setEmoteResult : ", status);
 }
 
 function resolveEmotionResult(emotion) {
@@ -114,4 +120,15 @@ function resolveEmotionResult(emotion) {
         }
         resolve("Success");
     });
+}
+
+export function setSubmitButton(summaryValues) {
+    for (const [_, value] of Object.entries(summaryValues)) {
+        if (value.checkedValue === -1) {
+            display_info.is_submit = true;
+            return true;
+        }
+    }
+    display_info.is_submit = false;
+    return false
 }

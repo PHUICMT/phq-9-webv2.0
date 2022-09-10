@@ -5,7 +5,7 @@ import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
 import { ConfirmModal } from '../../components/modal/modal';
 
-import { videoRecorder, socketDisconnect, stopVideo, setArticle, setEmoteResult } from '../../services/video-recorder';
+import { videoRecorder, socketDisconnect, stopVideo, setArticle, setEmoteResult, setSubmitButton } from '../../services/video-recorder';
 import { VideoPlayer } from '../../services/video-player';
 
 import { useState, useEffect } from 'react';
@@ -29,17 +29,17 @@ export function SurveyPage() {
         "9. คิดทำร้ายตนเอง หรือคิดว่าถ้าตาย ๆ ไปเสียคงจะดี"
     ]
 
-    let summaryValues = {
+    var summaryValues = {
         values: {
-            1: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            2: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            3: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            4: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            5: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            6: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            7: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            8: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
-            9: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false, submit: false } },
+            1: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            2: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            3: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            4: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            5: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            6: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            7: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            8: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            9: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
         }
     }
 
@@ -49,6 +49,7 @@ export function SurveyPage() {
 
     const handleConfirmButton = () => {
         stopVideo();
+        setSubmitButton(summaryValues.values);
         setEmoteResult(summaryValues.values);
         socketDisconnect({
             user_email: email,
@@ -68,11 +69,11 @@ export function SurveyPage() {
         }
 
         for (const [key, value] of Object.entries(summaryValues.values)) {
-            const keyIndex = key + 1
-            if (keyIndex < index && value.checkedValue !== -1) {
-                summaryValues.values[index].behaver.skip = true
+            if (key < index && value.checkedValue === -1) {
+                summaryValues.values[key].behaver.skip = true
+            } else if (key === index) {
+                return;
             }
-            return
         }
     }
 
