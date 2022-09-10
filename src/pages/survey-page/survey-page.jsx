@@ -23,7 +23,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function SurveyPage() {
     const userID = useState(uuidv4());
-    const [email, setEmail] = useState('');
     const [modalClosed, setModalClosed] = useState(false);
     const menuTitle = [
         "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
@@ -56,7 +55,6 @@ export function SurveyPage() {
         setSubmitButton(summaryValues.values);
         setEmoteResult(summaryValues.values);
         socketDisconnect({
-            user_email: email,
             user_id: userID[0]
         });
     }
@@ -95,12 +93,10 @@ export function SurveyPage() {
     useEffect(() => {
         if (modalClosed) {
             videoRecorder({
-                user_email: email,
                 user_id: userID
             });
         }
     }, [
-        email,
         userID,
         modalClosed
     ]);

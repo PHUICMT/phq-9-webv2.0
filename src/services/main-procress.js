@@ -27,7 +27,6 @@ export const videoRecorder = (data) => {
     if (socket !== undefined) {
         socket.on('connect', function () {
             var userData = {
-                user_email: data.user_email,
                 user_id: data.user_id[0]
             };
             socket.emit('user_connected', userData);
@@ -65,7 +64,6 @@ export const videoRecorder = (data) => {
         var dataToSend = {
             imageBase64: imageBase64,
             timeStamp: Math.floor(new Date().getTime() / 1000),
-            user_email: data.user_email,
             user_id: data.user_id[0],
             article: article
         }
