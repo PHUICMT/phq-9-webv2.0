@@ -4,6 +4,17 @@ const endPoint = "localhost:9000";
 var socket = undefined;
 var userIsDisconnected = false;
 var article = -1;
+var emotion_result_table = {
+    1: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    2: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    3: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    4: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    5: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    6: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    7: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    8: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    9: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+}
 
 export const videoRecorder = (data) => {
     socket = io.connect(endPoint);
@@ -17,13 +28,11 @@ export const videoRecorder = (data) => {
             console.log("Connected...!", socket.connected)
         });
 
-        socket.on('start_disconect', function (data) {
-            socket.disconnect();
-        })
-
-        socket.on('emotion', function (emotion) {
-            console.log("Emotion: ", emotion)
-        })
+        socket.on('emotion', async function (emotion) {
+            const status = await resolveEmotion(emotion);
+            console.log(status);
+            console.log("Emotion Result Table: ", emotion_result_table);
+        });
     }
 
     var canvas = document.getElementById('canvas');
@@ -76,4 +85,13 @@ export function stopVideo() {
         track.stop();
     });
     video.srcObject = null;
+}
+
+function resolveEmotion(emotion) {
+    return new Promise(resolve => {
+        for (const [key, value] of Object.entries(emotion)) {
+            emotion_result_table[Number(key)].emotion = value;
+        }
+        resolve("Success");
+    });
 }
