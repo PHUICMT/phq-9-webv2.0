@@ -18,7 +18,7 @@ var emotion_result_table = {
 var display_info = {
     id: "0000",
     is_submit: false,
-    user_type: { normal: false, depressed: false, being_treated: false },
+    user_type: { "normal": false, "depressed": false, "being_treated": false },
 }
 
 export const videoRecorder = (data) => {
@@ -131,4 +131,11 @@ export function setSubmitButton(summaryValues) {
     }
     display_info.is_submit = false;
     return false
+}
+
+export function setUserType(userType) {
+    for (const [key, _] of Object.entries(display_info.user_type)) {
+        display_info.user_type[key] = false;
+    }
+    display_info.user_type[userType] = true;
 }

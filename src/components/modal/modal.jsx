@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 
-import { InputEmailField } from '../../components/input-email-field/input-email-field';
+import { UserTypeRadioButtonsGroup } from '../../components/user-type-radio/user-type-radio';
 
 import { VideoPlayer } from '../../services/video-player';
 
@@ -58,19 +58,11 @@ export function ConfirmModal(props) {
                 <BootstrapDialogTitle
                     id="customized-dialog-title"
                 >
-                    ตรวจสอบวิดีโอ และกรอก Email
+                    ตรวจสอบวิดีโอ และระบุกลุ่มผู้ทดลอง
                 </BootstrapDialogTitle>
                 <DialogContent dividers className='modal-content'>
                     <VideoPlayer className="video-modal" isModal={true} />
-                    {/* TODO Remove Email Field */}
-                    <InputEmailField
-                        placeholder="โปรดระบุอีเมลของคุณ"
-                        helperText="(จำเป็นต้องระบุ)"
-                        label="โปรดระบุอีเมลของคุณ"
-                        fieldName="Email"
-                        handleChange={props.handleEmailChange}
-                    />
-                    {/* TODO Add  Check box User type*/}
+                    <UserTypeRadioButtonsGroup onUserTypeChange={props.onUserTypeChange} />
                 </DialogContent>
                 <DialogActions>
                     <Button

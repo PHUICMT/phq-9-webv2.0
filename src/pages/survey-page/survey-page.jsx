@@ -5,7 +5,15 @@ import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
 import { ConfirmModal } from '../../components/modal/modal';
 
-import { videoRecorder, socketDisconnect, stopVideo, setArticle, setEmoteResult, setSubmitButton } from '../../services/video-recorder';
+import {
+    videoRecorder,
+    socketDisconnect,
+    stopVideo,
+    setArticle,
+    setEmoteResult,
+    setSubmitButton,
+    setUserType
+} from '../../services/video-recorder';
 import { VideoPlayer } from '../../services/video-player';
 
 import { useState, useEffect } from 'react';
@@ -41,10 +49,6 @@ export function SurveyPage() {
             8: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
             9: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
         }
-    }
-
-    const handleEmailChange = (value, _) => {
-        setEmail(value);
     }
 
     const handleConfirmButton = () => {
@@ -86,6 +90,11 @@ export function SurveyPage() {
         if (currentTimeValue > 60) {
             summaryValues.values[index].behaver.over = true;
         }
+    }
+
+    const handleOnUserTypeChange = (e) => {
+        const value = e.target.value;
+        setUserType(value);
     }
 
     useEffect(() => {
@@ -133,8 +142,8 @@ export function SurveyPage() {
             </Stack>
             <ConfirmModal
                 open={true}
-                handleEmailChange={handleEmailChange}
                 onCloseModal={handleOnCloseModal}
+                onUserTypeChange={handleOnUserTypeChange}
             />
         </Container>
     );
