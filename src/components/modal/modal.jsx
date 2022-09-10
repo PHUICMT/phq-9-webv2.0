@@ -39,6 +39,7 @@ BootstrapDialogTitle.propTypes = {
 
 export function ConfirmModal(props) {
     const [open, setOpen] = useState(false);
+    const [validUserType, setValidUserType] = useState(false);
 
     useEffect(() => {
         setOpen(props.open);
@@ -48,6 +49,12 @@ export function ConfirmModal(props) {
         setOpen(false);
         props.onCloseModal(true);
     };
+
+    const handleOnUserTypeChange = (e) => {
+        const value = e.target.value;
+        setValidUserType(true);
+        props.onUserTypeChange(value);
+    }
 
     return (
         <div>
@@ -62,15 +69,16 @@ export function ConfirmModal(props) {
                 </BootstrapDialogTitle>
                 <DialogContent dividers className='modal-content'>
                     <VideoPlayer className="video-modal" isModal={true} />
-                    <UserTypeRadioButtonsGroup onUserTypeChange={props.onUserTypeChange} />
+                    <UserTypeRadioButtonsGroup onUserTypeChange={handleOnUserTypeChange} />
                 </DialogContent>
                 <DialogActions>
                     <Button
                         onClick={handleClose}
                         size="large"
                         variant="contained"
+                        disabled={!validUserType}
                     >
-                        ต่อไป
+                        เริ่มทดสอบ
                     </Button>
                 </DialogActions>
             </BootstrapDialog>

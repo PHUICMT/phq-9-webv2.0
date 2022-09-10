@@ -92,11 +92,6 @@ export function SurveyPage() {
         }
     }
 
-    const handleOnUserTypeChange = (e) => {
-        const value = e.target.value;
-        setUserType(value);
-    }
-
     useEffect(() => {
         if (modalClosed) {
             videoRecorder({
@@ -143,7 +138,7 @@ export function SurveyPage() {
             <ConfirmModal
                 open={true}
                 onCloseModal={handleOnCloseModal}
-                onUserTypeChange={handleOnUserTypeChange}
+                onUserTypeChange={setUserType}
             />
         </Container>
     );
