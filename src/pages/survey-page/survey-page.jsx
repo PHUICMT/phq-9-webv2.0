@@ -13,7 +13,7 @@ import {
     setEmoteResult,
     setSubmitButton,
     setUserType
-} from '../../services/video-recorder';
+} from '../../services/main-procress';
 import { VideoPlayer } from '../../services/video-player';
 
 import { useState, useEffect } from 'react';
