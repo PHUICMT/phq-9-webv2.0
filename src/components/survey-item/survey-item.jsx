@@ -72,10 +72,10 @@ export function RowRadioButtonsGroup(props) {
                                     name="row-radio-buttons-group"
                                     onChange={handleOnRadioChange}
                                 >
-                                    <MyFormControlLabel labelPlacement="top" value={0} control={<Radio />} label="0" />
-                                    <MyFormControlLabel labelPlacement="top" value={1} control={<Radio />} label="1" />
-                                    <MyFormControlLabel labelPlacement="top" value={2} control={<Radio />} label="2" />
-                                    <MyFormControlLabel labelPlacement="top" value={3} control={<Radio />} label="3" />
+                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={0} control={<Radio />} label="0" />
+                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={1} control={<Radio />} label="1" />
+                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={2} control={<Radio />} label="2" />
+                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={3} control={<Radio />} label="3" />
                                 </RadioGroup>
                             </FormControl>
                         </Grid2>

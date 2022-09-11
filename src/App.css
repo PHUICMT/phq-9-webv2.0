@@ -27,13 +27,10 @@
 }
 
 caption {
-  font-size: 1.5vw;
-  font-weight: 600;
-  color: #ffffff;
-  text-align: center;
-  padding: 1vw;
-  background-color: #75bffc;
-  border-radius: 1vw;
+  font-size: larger !important;
+  color: #ffc6c6 !important;
+  font-weight: 600 !important;
+  background-color: #00000096;
 }
 
 iframe {

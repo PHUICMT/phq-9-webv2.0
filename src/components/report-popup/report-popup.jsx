@@ -84,36 +84,34 @@ export function EmoteReportTable(props) {
     }
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 600 }}>
-                <Table stickyHeader aria-label="caption table">
-                    {(isSubmit === true) ? <caption>Is Submit!!</caption> : null}
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>คำถาม</TableCell>
-                            <TableCell align="center">เวลาที่ใช้ในข้อนี้ (วินาที)</TableCell>
-                            <TableCell align="center">ผลคะแนนรายข้อ</TableCell>
-                            <TableCell align="center">พฤติกรรมระหว่างตอบ</TableCell>
-                            <TableCell align="center">อารมณ์</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {
-                            reportDataRows !== undefined ?
-                                reportDataRows.map((row) => (
-                                    <TableRow key={row.ItemQuestion}>
-                                        <TableCell component="th" scope="row">{row.ItemQuestion}</TableCell>
-                                        <TableCell align="center">{row.ReactionTime}</TableCell>
-                                        <TableCell align="center">{row.Score}</TableCell>
-                                        <TableCell align="center">{row.Behavior}</TableCell>
-                                        <TableCell align="center">{row.Emotion}</TableCell>
-                                    </TableRow>
-                                )) : null
-                        }
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Paper>
+        <TableContainer sx={{ maxHeight: 600 }} component={Paper}>
+            <Table stickyHeader aria-label="caption table">
+                {(isSubmit === true) ? <caption>Is Submit!!</caption> : null}
+                <TableHead>
+                    <TableRow>
+                        <TableCell>คำถาม</TableCell>
+                        <TableCell align="center">เวลาที่ใช้ในข้อนี้ (วินาที)</TableCell>
+                        <TableCell align="center">ผลคะแนนรายข้อ</TableCell>
+                        <TableCell align="center">พฤติกรรมระหว่างตอบ</TableCell>
+                        <TableCell align="center">อารมณ์</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {
+                        reportDataRows !== undefined ?
+                            reportDataRows.map((row) => (
+                                <TableRow key={row.ItemQuestion}>
+                                    <TableCell component="th" scope="row">{row.ItemQuestion}</TableCell>
+                                    <TableCell align="center">{row.ReactionTime} วินาที</TableCell>
+                                    <TableCell align="center">{row.Score}</TableCell>
+                                    <TableCell align="center">{row.Behavior}</TableCell>
+                                    <TableCell align="center">{row.Emotion}</TableCell>
+                                </TableRow>
+                            )) : null
+                    }
+                </TableBody>
+            </Table>
+        </TableContainer>
 
     );
 }

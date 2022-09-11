@@ -27,6 +27,7 @@ export function SurveyPage() {
     const [isSubmit, setIsSubmit] = useState(false);
     const [modalClosed, setModalClosed] = useState(false);
     const [reportReady, setReportReady] = useState(false);
+    const [reportOpen, setReportOpen] = useState(false);
     const [reportData, setReportData] = useState(undefined);
 
     const menuTitle = [
@@ -116,6 +117,7 @@ export function SurveyPage() {
             if (status === 'Success') {
                 setReportData(getReportInfo());
                 setReportReady(true);
+                setReportOpen(true);
             }
         });
         return () => {
@@ -136,26 +138,38 @@ export function SurveyPage() {
                         index={index + 1}
                         onRadioChange={handleOnRadioChange}
                         title={title}
+                        disabled={isSubmit}
                     />
 
                 )
             })
             }
             <Stack spacing={2} alignItems="center">
-                <Button
-                    onClick={() => handleConfirmButton()}
-                    style={styles.button}
-                    variant="contained"
-                    size="large"
-                    endIcon={<SendIcon />}
-                >
-                    ส่งคำตอบ
-                </Button>
+                {
+                    (isSubmit === false) ? <Button
+                        onClick={() => handleConfirmButton()}
+                        style={styles.button}
+                        variant="contained"
+                        size="large"
+                        endIcon={<SendIcon />}
+                    >
+                        ส่งคำตอบ
+                    </Button> : <Button
+                        onClick={() => setReportOpen(true)}
+                        style={styles.button}
+                        variant="contained"
+                        size="large"
+                        endIcon={<SendIcon />}
+                    >
+                        แสดงผลการประเมิน
+                    </Button>
+                }
                 <FooterTextPaper />
             </Stack>
             <ReportModal
-                open={reportReady}
+                open={(reportReady && reportOpen)}
                 reportData={reportData}
+                onCloseModal={(e) => setReportOpen(!e)}
             />
             <ConfirmModal
                 open={!modalClosed}
