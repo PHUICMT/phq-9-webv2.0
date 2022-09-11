@@ -1,0 +1,8 @@
+.emote-group-table {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.emote-icon {
+    margin-inline: 0.5rem;
+}

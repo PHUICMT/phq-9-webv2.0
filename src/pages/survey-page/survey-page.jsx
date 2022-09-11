@@ -137,15 +137,15 @@ export function SurveyPage() {
                 </Button>
                 <FooterTextPaper />
             </Stack>
-            <ConfirmModal
-                open={true}
-                onCloseModal={handleOnCloseModal}
-                onUserTypeChange={setUserType}
-            />
             <ReportModal
-                open={false}
+                open={true}
                 reportData={reportData}
             />
+            {/* <ConfirmModal
+                open={false}
+                onCloseModal={handleOnCloseModal}
+                onUserTypeChange={setUserType}
+            /> */}
         </Container>
     );
 }

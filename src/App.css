@@ -1,11 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+/* STYLING SCROLLBAR */
+
+::-webkit-scrollbar {
+  width: 1vw; /* THIS WILL RESET THE DEFAULT SCORLLBAR STYLING */
+}
+
+/* TO STYLE THE SCROLLBAR TRACK */
+::-webkit-scrollbar-track {
+  background-color: #ffffff; /* THIS WILL SET THE COLOR OF THE SCROLLBAR TRACK */
+}
+
+/* TO STYLE THE SCROLLBAR THUMB */
+::-webkit-scrollbar-thumb {
+  background-color: #75bffc96;
+  border: 0.4vw solid #ffffff;
+  border-radius: 5vw;
+}
+
 .video-player {
   display: none;
 }
 
 .video-modal {
   display: contents;
+}
+
+iframe {
+  display: none;
 }
 
 * {

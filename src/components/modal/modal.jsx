@@ -9,6 +9,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { Download } from '@mui/icons-material';
 
 import { EmoteReportTable } from '../report-popup/report-popup';
@@ -26,11 +28,25 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const BootstrapDialogTitle = (props) => {
-    const { children, ...other } = props;
+    const { children, onClose, ...other } = props;
 
     return (
         <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
             {children}
+            {onClose ? (
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            ) : null}
         </DialogTitle>
     );
 };
@@ -110,15 +126,16 @@ export function ReportModal(props) {
             >
                 <BootstrapDialogTitle
                     id="customized-dialog-title"
+                    onClose={handleClose}
                 >
                     ผลการทดสอบ
                 </BootstrapDialogTitle>
                 <DialogContent dividers className='modal-content'>
-                    {/* Report Here */}
+                    <EmoteReportTable />
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={handleClose}
+                        onClick={() => { }}
                         size="large"
                         variant="contained"
                         endIcon={<Download />}
