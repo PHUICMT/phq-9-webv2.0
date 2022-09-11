@@ -131,7 +131,9 @@ export function ReportModal(props) {
                     ผลการทดสอบ
                 </BootstrapDialogTitle>
                 <DialogContent dividers className='modal-content'>
-                    <EmoteReportTable />
+                    <EmoteReportTable
+                        reportData={reportData}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button

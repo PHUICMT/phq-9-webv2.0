@@ -26,6 +26,16 @@
   display: contents;
 }
 
+caption {
+  font-size: 1.5vw;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  padding: 1vw;
+  background-color: #75bffc;
+  border-radius: 1vw;
+}
+
 iframe {
   display: none;
 }

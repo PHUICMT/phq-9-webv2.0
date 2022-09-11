@@ -5,15 +5,15 @@ var socket = undefined;
 var userIsDisconnected = false;
 var article = -1;
 var emotion_result_table = {
-    1: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    2: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    3: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    4: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    5: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    6: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    7: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    8: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
-    9: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: {} },
+    1: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    2: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    3: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    4: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    5: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    6: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    7: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    8: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
+    9: { reaction_time: 0.0, score: 0.0, behaver: {}, emotion: undefined },
 }
 var display_info = {
     id: "0000",
@@ -34,7 +34,11 @@ export const videoRecorder = (data) => {
         });
 
         socket.on('emotion', async function (emotion) {
+            localStorage.setItem('task', "process");
             const status = await resolveEmotion(emotion);
+            localStorage.setItem('status', status);
+            localStorage.setItem('task', "finish");
+            window.dispatchEvent(new Event("storage"));
             console.log("resolveEmotion : ", status);
             console.log("Emotion Result Table: ", emotion_result_table);
         });

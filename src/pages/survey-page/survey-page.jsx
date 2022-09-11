@@ -24,8 +24,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export function SurveyPage() {
     const userID = useState(uuidv4());
+    const [isSubmit, setIsSubmit] = useState(false);
     const [modalClosed, setModalClosed] = useState(false);
-    const [reportData, setReportData] = useState({});
+    const [reportReady, setReportReady] = useState(false);
+    const [reportData, setReportData] = useState(undefined);
 
     const menuTitle = [
         "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
@@ -53,16 +55,15 @@ export function SurveyPage() {
         }
     }
 
-    const handleConfirmButton = () => {
+    const handleConfirmButton = async () => {
+        setIsSubmit(true);
         stopVideo();
         setSubmitButton(summaryValues.values);
-        setEmoteResult(summaryValues.values);
+        setEmoteResult(summaryValues.values)
         socketDisconnect({
             user_id: userID[0]
         });
-        getReportInfo().then((data) => {
-            setReportData(data);
-        });
+
     }
 
     const handleOnCloseModal = (isClosed) => {
@@ -107,6 +108,21 @@ export function SurveyPage() {
         modalClosed
     ]);
 
+    useEffect(() => {
+        localStorage.setItem('status', "waiting");
+        window.addEventListener("storage", () => {
+            const status = localStorage.getItem('status');
+            console.log("localStorage status", status)
+            if (status === 'Success') {
+                setReportData(getReportInfo());
+                setReportReady(true);
+            }
+        });
+        return () => {
+            window.removeEventListener("storage", null);
+        }
+    }, []);
+
     return (
         <Container>
             <VideoPlayer className="video-player" />
@@ -138,14 +154,14 @@ export function SurveyPage() {
                 <FooterTextPaper />
             </Stack>
             <ReportModal
-                open={true}
+                open={reportReady}
                 reportData={reportData}
             />
-            {/* <ConfirmModal
-                open={false}
+            <ConfirmModal
+                open={!modalClosed}
                 onCloseModal={handleOnCloseModal}
                 onUserTypeChange={setUserType}
-            /> */}
+            />
         </Container>
     );
 }
