@@ -77,10 +77,13 @@ export function SurveyPage() {
         if (oldValue !== -1) {
             summaryValues.values[index].behaver.change = true;
         }
+        if (summaryValues.values[index].behaver.skip === true) {
+            summaryValues.values[index].behaver.return = true;
+        }
 
         for (const [key, value] of Object.entries(summaryValues.values)) {
             if (key < index && value.checkedValue === -1) {
-                summaryValues.values[key].behaver.skip = true
+                summaryValues.values[key].behaver.skip = true;
             } else if (key === index) {
                 return;
             }
@@ -89,7 +92,7 @@ export function SurveyPage() {
 
     const handleOnMouseLeave = (value) => {
         const index = value.index;
-        const totalTime = value.totalTime;
+        const totalTime = parseFloat(value.totalTime);
         summaryValues.values[index].hoverTime += totalTime;
 
         const currentTimeValue = summaryValues.values[index].hoverTime;

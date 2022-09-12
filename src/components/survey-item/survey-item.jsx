@@ -13,7 +13,7 @@ import { StyledFormControlLabel, StyledCardContent } from './survey-item-compone
 
 export function RowRadioButtonsGroup(props) {
     const [index, setIndex] = useState(0);
-    const [hoverStart, setHoverStart] = useState(0);
+    const [hoverStart, setHoverStart] = useState(0.0);
     const [radioValue, setRadioValue] = useState(-1);
 
     useEffect(() => {
@@ -35,7 +35,7 @@ export function RowRadioButtonsGroup(props) {
     }
 
     const getCurrentTime = () => {
-        return Math.round((new Date()).getTime() / 1000);
+        return ((new Date()).getTime());
     }
 
     const handleOnMouseEnter = () => {
@@ -48,7 +48,7 @@ export function RowRadioButtonsGroup(props) {
     const handleOnMouseLeave = () => {
         const value = {
             index: index,
-            totalTime: getCurrentTime() - hoverStart
+            totalTime: ((getCurrentTime() - hoverStart) / 1000.0)
         }
         props.onMouseLeave(value);
     };

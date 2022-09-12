@@ -29,15 +29,15 @@ export function EmoteReportTable(props) {
         const reportInfo = props.reportData.display_info;
         if (reportResults[1].emotion !== undefined) {
             setReportDataRows([
-                createData('ข้อ 1', reportResults[1].reaction_time, reportResults[1].score, showBehavior(reportResults[1].behaver), showEmotionIcon(reportResults[1].emotion)),
-                createData('ข้อ 2', reportResults[2].reaction_time, reportResults[2].score, showBehavior(reportResults[2].behaver), showEmotionIcon(reportResults[2].emotion)),
-                createData('ข้อ 3', reportResults[3].reaction_time, reportResults[3].score, showBehavior(reportResults[3].behaver), showEmotionIcon(reportResults[3].emotion)),
-                createData('ข้อ 4', reportResults[4].reaction_time, reportResults[4].score, showBehavior(reportResults[4].behaver), showEmotionIcon(reportResults[4].emotion)),
-                createData('ข้อ 5', reportResults[5].reaction_time, reportResults[5].score, showBehavior(reportResults[5].behaver), showEmotionIcon(reportResults[5].emotion)),
-                createData('ข้อ 6', reportResults[6].reaction_time, reportResults[6].score, showBehavior(reportResults[6].behaver), showEmotionIcon(reportResults[6].emotion)),
-                createData('ข้อ 7', reportResults[7].reaction_time, reportResults[7].score, showBehavior(reportResults[7].behaver), showEmotionIcon(reportResults[7].emotion)),
-                createData('ข้อ 8', reportResults[8].reaction_time, reportResults[8].score, showBehavior(reportResults[8].behaver), showEmotionIcon(reportResults[8].emotion)),
-                createData('ข้อ 9', reportResults[9].reaction_time, reportResults[9].score, showBehavior(reportResults[9].behaver), showEmotionIcon(reportResults[9].emotion))
+                createData('ข้อ 1', reportResults[1].reaction_time.toFixed(2), reportResults[1].score, showBehavior(reportResults[1].behaver), showEmotionIcon(reportResults[1].emotion)),
+                createData('ข้อ 2', reportResults[2].reaction_time.toFixed(2), reportResults[2].score, showBehavior(reportResults[2].behaver), showEmotionIcon(reportResults[2].emotion)),
+                createData('ข้อ 3', reportResults[3].reaction_time.toFixed(2), reportResults[3].score, showBehavior(reportResults[3].behaver), showEmotionIcon(reportResults[3].emotion)),
+                createData('ข้อ 4', reportResults[4].reaction_time.toFixed(2), reportResults[4].score, showBehavior(reportResults[4].behaver), showEmotionIcon(reportResults[4].emotion)),
+                createData('ข้อ 5', reportResults[5].reaction_time.toFixed(2), reportResults[5].score, showBehavior(reportResults[5].behaver), showEmotionIcon(reportResults[5].emotion)),
+                createData('ข้อ 6', reportResults[6].reaction_time.toFixed(2), reportResults[6].score, showBehavior(reportResults[6].behaver), showEmotionIcon(reportResults[6].emotion)),
+                createData('ข้อ 7', reportResults[7].reaction_time.toFixed(2), reportResults[7].score, showBehavior(reportResults[7].behaver), showEmotionIcon(reportResults[7].emotion)),
+                createData('ข้อ 8', reportResults[8].reaction_time.toFixed(2), reportResults[8].score, showBehavior(reportResults[8].behaver), showEmotionIcon(reportResults[8].emotion)),
+                createData('ข้อ 9', reportResults[9].reaction_time.toFixed(2), reportResults[9].score, showBehavior(reportResults[9].behaver), showEmotionIcon(reportResults[9].emotion))
             ]);
             setId(reportInfo.id);
             setIsSubmit(reportInfo.is_submit)
