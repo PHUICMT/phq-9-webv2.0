@@ -19,6 +19,7 @@ var display_info = {
     id: "0000",
     is_submit: false,
     user_type: { "normal": false, "depressed": false, "being_treated": false },
+    result: {}
 }
 
 export const videoRecorder = (data) => {
@@ -107,7 +108,31 @@ function resolveEmotion(emotion) {
 }
 
 export async function setEmoteResult(emotion_result) {
-    const status = await resolveEmotionResult(emotion_result);
+    await resolveEmotionResult(emotion_result);
+    const score = calculateScore();
+    console.log("Score: ", score);
+    if (score > 19) {
+        display_info.result = { color: '#DB5451', result: 'ท่านมีอาการซึมเศร้าระดับรุนแรงมาก', info: 'ต้องพบแพทย์เพื่อประเมินอาการและให้การรักษาโดยเร็ว ไม่ควรปล่อยทิ้งไว้' };
+    } else if (score > 14) {
+        display_info.result = { color: '#E89E60', result: 'ท่านมีอาการซึมเศร้าระดับรุนแรงค่อนข้างมาก', info: 'ควรพบแพทย์เพื่อประเมินอาการและให้การรักษาระหว่างนี้ควรพักผ่อนให้เพียงพอ นอนหลับให้ได้ 6-8 ชั่วโมง ออกกำลังกายเบาๆ ทำกิจกรรมที่ทำให้ผ่อนคลาย ไม่เก็บตัว และควรขอคำปรึกษาช่วยเหลือจากผู้ใกล้ชิด' };
+    } else if (score > 8) {
+        display_info.result = { color: '#FCCD3A', result: 'ท่านมีอาการซึมเศร้าระดับปานกลาง', info: 'ควรพักผ่อนให้เพียงพอ นอนหลับให้ได้ 6-8 ชั่วโมง ออกกำลังกายสม่ำเสมอ ทำกิจกรรมที่ทำให้ผ่อนคลาย พบปะเพื่อนฝูง ควรขอคำปรึกษาช่วยเหลือจากผู้ที่ไว้วางใจ ไม่จมอยู่กับปัญหา มองหาหนทางคลี่คลาย หากอาการที่ท่านเป็นมีผลกระทบต่อการทำงานหรือการเข้าสังคม (อาการซึมเศร้าทำให้ท่านมีปัญหาในการทำงาน การดูแลสิ่งต่าง ๆ ในบ้าน หรือการเข้ากับผู้คน ในระดับมากถึงมากที่สุด) หรือหากท่านมีอาการระดับนี้มานาน 1-2 สัปดาห์แล้วยังไม่ดีขึ้น ควรพบแพทย์เพื่อรับการช่วยเหลือรักษา' };
+    } else if (score > 4) {
+        display_info.result = { color: '#6BAD8F', result: 'ท่านมีอาการซึมเศร้าระดับเล็กน้อย', info: 'ควรพักผ่อนให้เพียงพอ นอนหลับให้ได้ 6-8 ชั่วโมง ออกกำลังกายสม่ำเสมอ ทำกิจกรรมที่ทำให้ผ่อนคลาย พบปะเพื่อนฝูง ควรทำแบบประเมินอีกครั้งใน 1 สัปดาห์' };
+    } else {
+        display_info.result = { color: '#79CFDA', result: 'ท่านไม่มีอาการซึมเศร้าหรือมีก็เพียงเล็กน้อย', info: 'ไม่จำเป็นต้องรักษา' };
+    }
+}
+
+function calculateScore() {
+    var score = 0;
+    for (const [_, value] of Object.entries(emotion_result_table)) {
+        if (value.score >= 0) {
+            score += Number(value.score);
+        }
+    }
+
+    return score;
 }
 
 function resolveEmotionResult(emotion) {

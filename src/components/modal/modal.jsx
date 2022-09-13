@@ -207,6 +207,7 @@ export function ReportModal(props) {
                 user_type: getUserType(props.reportData.display_info.user_type),
                 is_submit: isSubmitted ? 'ส่งแบบทดสอบก่อนตอบครบทุกข้อ' : '',
                 current_date: currentDate,
+                result: props.reportData.display_info.result,
             }
 
             setExportReportData(exportData);
@@ -254,11 +255,11 @@ export function ReportModal(props) {
             if (is_type) {
                 switch (type) {
                     case 'normal':
-                        return 'ผู้ทดลองปกติ';
+                        return 'ผู้ทดสอบปกติ';
                     case 'depressed':
-                        return 'ผู้ทดลองซึมเศร้า';
+                        return 'ผู้ทดสอบซึมเศร้า';
                     case 'being_treated':
-                        return 'ผู้ทดลองกำลังรักษา';
+                        return 'ผู้ทดสอบกำลังรักษา';
                     default:
                         return '';
                 }

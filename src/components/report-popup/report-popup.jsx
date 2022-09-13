@@ -17,6 +17,7 @@ import Paper from '@mui/material/Paper';
 
 export function EmoteReportTable(props) {
     const [reportDataRows, setReportDataRows] = useState(undefined);
+    const [result, setResult] = useState(undefined);
     const [isSubmit, setIsSubmit] = useState(false);
 
     function createData(ItemQuestion, ReactionTime, Score, Behavior, Emotion) {
@@ -39,13 +40,15 @@ export function EmoteReportTable(props) {
                 createData('ข้อ 9', reportResults[9].reaction_time.toFixed(2), reportResults[9].score, showBehavior(reportResults[9].behaver), showEmotionIcon(reportResults[9].emotion))
             ]);
             setIsSubmit(reportInfo.is_submit)
+            setResult(reportInfo.result)
         }
     }, [
         props.reportData,
         props.reportData.emotion_result_table,
         props.reportData.emotion_result_table.emotion,
         props.reportData.display_info,
-        props.reportData.display_info.is_submit
+        props.reportData.display_info.is_submit,
+        props.reportData.display_info.result
     ]);
 
     const showBehavior = (behavior) => {
@@ -78,10 +81,22 @@ export function EmoteReportTable(props) {
         );
     }
 
+    const showResult = () => {
+        const result_text = result.result
+        const result_info = result.info
+        const result_color = result.color
+        return (
+            <div className="result-group-table">
+                <div className="result-table" style={{ color: result_color, marginLeft: 10, marginTop: 18, marginBottom: 10 }}>ผลการทดสอบ : {result_text}</div>
+                <div className="result-table" style={{ marginLeft: 10, marginTop: 18, marginBottom: 10 }}>ข้อเสนอแนะ : {result_info}</div>
+            </div >
+        );
+    }
+
     return (
         <TableContainer sx={{ maxHeight: 600 }} component={Paper}>
             <Table stickyHeader aria-label="caption table">
-                {(isSubmit === true) ? <caption>Is Submit!!</caption> : null}
+                {(isSubmit === true) ? <caption style={{ marginTop: 18 }}>IS SUBMIT</caption> : null}
                 <TableHead>
                     <TableRow>
                         <TableCell>คำถาม</TableCell>
@@ -106,6 +121,7 @@ export function EmoteReportTable(props) {
                     }
                 </TableBody>
             </Table>
+            {result !== undefined ? showResult() : null}
         </TableContainer>
 
     );
