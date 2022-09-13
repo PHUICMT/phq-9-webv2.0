@@ -4,6 +4,7 @@ import { RowRadioButtonsGroup } from '../../components/survey-item/survey-item';
 import { Header } from '../../components/header/header';
 import { FooterTextPaper } from '../../components/text-info/text-info';
 import { ConfirmModal, ReportModal } from '../../components/modal/modal';
+import { LoadingModal } from '../../components/loader/loader';
 
 import {
     videoRecorder,
@@ -29,6 +30,8 @@ export function SurveyPage() {
     const [reportReady, setReportReady] = useState(false);
     const [reportOpen, setReportOpen] = useState(false);
     const [reportData, setReportData] = useState(undefined);
+
+    const [showLoader, setShowLoader] = useState(false);
 
     const menuTitle = [
         "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
@@ -57,6 +60,7 @@ export function SurveyPage() {
     }
 
     const handleConfirmButton = async () => {
+        setShowLoader(true);
         setIsSubmit(true);
         stopVideo();
         setSubmitButton(summaryValues.values);
@@ -119,6 +123,7 @@ export function SurveyPage() {
             if (status === 'Success') {
                 setReportData(getReportInfo());
                 setReportReady(true);
+                setShowLoader(false);
                 setReportOpen(true);
             }
         });
@@ -168,6 +173,7 @@ export function SurveyPage() {
                 }
                 <FooterTextPaper />
             </Stack>
+            <LoadingModal open={showLoader} />
             <ReportModal
                 open={(reportReady && reportOpen)}
                 reportData={reportData}

@@ -54,7 +54,6 @@ const generatePDF = (emotionReport) => {
     });
 
     console.log(tableRows)
-    // startY is basically margin-top
     doc.autoTable({
         styles: {
             font: 'THSarabunNew',
@@ -78,9 +77,7 @@ const generatePDF = (emotionReport) => {
     })
 
     const date = date_full.split(" ");
-    // date string to generate filename.
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
-    // define the name of our PDF file.
     doc.save(`report_${user_id}_${dateStr}.pdf`);
 };
 
