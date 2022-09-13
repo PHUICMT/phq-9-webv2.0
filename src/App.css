@@ -28,9 +28,9 @@
 
 caption {
   font-size: larger !important;
-  color: #ffc6c6 !important;
+  color: #c70000 !important;
   font-weight: 600 !important;
-  background-color: #00000096;
+  text-align: center !important;
 }
 
 iframe {

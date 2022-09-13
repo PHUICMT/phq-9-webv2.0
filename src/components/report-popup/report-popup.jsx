@@ -14,9 +14,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+
 export function EmoteReportTable(props) {
-    const [id, setId] = useState(undefined);
-    const [userType, setUserType] = useState(undefined);
     const [reportDataRows, setReportDataRows] = useState(undefined);
     const [isSubmit, setIsSubmit] = useState(false);
 
@@ -39,9 +38,7 @@ export function EmoteReportTable(props) {
                 createData('ข้อ 8', reportResults[8].reaction_time.toFixed(2), reportResults[8].score, showBehavior(reportResults[8].behaver), showEmotionIcon(reportResults[8].emotion)),
                 createData('ข้อ 9', reportResults[9].reaction_time.toFixed(2), reportResults[9].score, showBehavior(reportResults[9].behaver), showEmotionIcon(reportResults[9].emotion))
             ]);
-            setId(reportInfo.id);
             setIsSubmit(reportInfo.is_submit)
-            setUserType(reportInfo.user_type)
         }
     }, [
         props.reportData,
@@ -51,8 +48,6 @@ export function EmoteReportTable(props) {
         props.reportData.display_info.is_submit
     ]);
 
-
-
     const showBehavior = (behavior) => {
         const is_change = behavior["change"]
         const is_skip = behavior["skip"]
@@ -61,9 +56,9 @@ export function EmoteReportTable(props) {
         return (
             <div className="behavior-group-table">
                 {is_change ? <div className="behavior-table">/Change/</div> : null}
-                {is_skip ? <div className="behavior-table">Skip/</div> : null}
-                {is_return ? <div className="behavior-table">Return/</div> : null}
-                {is_over ? <div className="behavior-table">Over/</div> : null}
+                {is_skip ? <div className="behavior-table">/Skip/</div> : null}
+                {is_return ? <div className="behavior-table">/Return/</div> : null}
+                {is_over ? <div className="behavior-table">/Over/</div> : null}
             </div >
         );
     }

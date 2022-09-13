@@ -12,11 +12,13 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Download } from '@mui/icons-material';
+import { format } from "date-fns";
 
 import { EmoteReportTable } from '../report-popup/report-popup';
 import { UserTypeRadioButtonsGroup } from '../user-type-radio/user-type-radio';
 
 import { VideoPlayer } from '../../services/video-player';
+import generatePDF from '../../services/report-generator';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -111,15 +113,171 @@ export function ReportModal(props) {
     const [open, setOpen] = useState(false);
     const [reportData, setReportData] = useState({});
 
+    const currentDate = format(new Date(), "yyyy-MM-dd")
+    const [id, setId] = useState(undefined);
+    const [userType, setUserType] = useState(undefined);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+
+    const [exportReportData, setExportReportData] = useState(undefined);
+    const [exportReportInfo, setExportReportInfo] = useState(undefined);
+
     useEffect(() => {
         setOpen(props.open);
         setReportData(props.reportData);
+        if (props.open === true) {
+            setIsSubmitted(props.reportData.display_info.is_submit);
+            setId(props.reportData.display_info.id);
+            setUserType(
+                getUserType(
+                    props.reportData.display_info.user_type
+                )
+            );
+        }
     }, [props.open, props.reportData]);
+
+    useEffect(() => {
+        if (props.open === true) {
+            const exportData = [
+                {
+                    id: 'ข้อ 1',
+                    reaction_time: props.reportData.emotion_result_table[1].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[1].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[1].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[1].emotion),
+                },
+                {
+                    id: 'ข้อ 2',
+                    reaction_time: props.reportData.emotion_result_table[2].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[2].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[2].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[2].emotion),
+                },
+                {
+                    id: 'ข้อ 3',
+                    reaction_time: props.reportData.emotion_result_table[3].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[3].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[3].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[3].emotion),
+                },
+                {
+                    id: 'ข้อ 4',
+                    reaction_time: props.reportData.emotion_result_table[4].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[4].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[4].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[4].emotion),
+                },
+                {
+                    id: 'ข้อ 5',
+                    reaction_time: props.reportData.emotion_result_table[5].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[5].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[5].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[5].emotion),
+                },
+                {
+                    id: 'ข้อ 6',
+                    reaction_time: props.reportData.emotion_result_table[6].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[6].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[6].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[6].emotion),
+                },
+                {
+                    id: 'ข้อ 7',
+                    reaction_time: props.reportData.emotion_result_table[7].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[7].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[7].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[7].emotion),
+                },
+                {
+                    id: 'ข้อ 8',
+                    reaction_time: props.reportData.emotion_result_table[8].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[8].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[8].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[8].emotion),
+                },
+                {
+                    id: 'ข้อ 9',
+                    reaction_time: props.reportData.emotion_result_table[9].reaction_time.toFixed(2) + ' วินาที',
+                    score: props.reportData.emotion_result_table[9].score,
+                    behaver: getBehaviorReport(props.reportData.emotion_result_table[9].behaver),
+                    emotion: getEmotionReport(props.reportData.emotion_result_table[9].emotion),
+                }
+            ]
+            const exportInfo = {
+                user_id: props.reportData.display_info.id,
+                user_type: getUserType(props.reportData.display_info.user_type),
+                is_submit: isSubmitted ? 'ส่งแบบทดสอบก่อนตอบครบทุกข้อ' : '',
+                current_date: currentDate,
+            }
+
+            setExportReportData(exportData);
+            setExportReportInfo(exportInfo);
+        }
+    }, [reportData, id, userType, currentDate]);
+
+    const getEmotionReport = (emotion) => {
+        var emotionReport = '';
+        if (emotion.fear > 0) {
+            emotionReport += 'กลัว : ' + emotion.fear.toFixed(2) + '% \n';
+        }
+        if (emotion.happy > 0) {
+            emotionReport += 'มีความสุข : ' + emotion.happy.toFixed(2) + '% \n';
+        }
+        if (emotion.sad > 0) {
+            emotionReport += 'เศร้า : ' + emotion.sad.toFixed(2) + '% \n';
+        }
+        if (emotion.neutral > 0) {
+            emotionReport += 'ไม่มีอารมณ์ : ' + emotion.neutral.toFixed(2) + '%';
+        }
+        return emotionReport;
+    }
+
+
+    const getBehaviorReport = (behaver) => {
+        var behavior = '';
+        if (behaver.change) {
+            behavior += 'เปลี่ยนคำตอบ, \n';
+        }
+        if (behaver.skip) {
+            behavior += 'ข้ามข้อ, \n';
+        }
+        if (behaver.return) {
+            behavior += 'กลับมาทำข้อที่ถูกข้าม, \n';
+        }
+        if (behaver.over) {
+            behavior += 'ใช้ระยะเวลาเกินกำหนด (60 วินาที), ';
+        }
+        return behavior;
+    }
+
+    const getUserType = (userType) => {
+        for (const [type, is_type] of Object.entries(userType)) {
+            if (is_type) {
+                switch (type) {
+                    case 'normal':
+                        return 'ผู้ทดลองปกติ';
+                    case 'depressed':
+                        return 'ผู้ทดลองซึมเศร้า';
+                    case 'being_treated':
+                        return 'ผู้ทดลองกำลังรักษา';
+                    default:
+                        return '';
+                }
+            }
+        }
+    }
 
     const handleClose = () => {
         setOpen(false);
         props.onCloseModal(true);
     };
+
+    const handleExport = () => {
+        const reportData = {
+            report_info: exportReportInfo,
+            report_data: exportReportData
+        }
+        generatePDF(reportData);
+    }
 
     return (
         <div>
@@ -140,7 +298,7 @@ export function ReportModal(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={() => { }}
+                        onClick={() => handleExport()}
                         size="large"
                         variant="contained"
                         endIcon={<Download />}

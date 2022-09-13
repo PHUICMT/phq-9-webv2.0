@@ -1,41 +1,74 @@
 import jsPDF from "jspdf";
-import { format } from "date-fns";
 import "jspdf-autotable";
+import "./THSarabunNew-normal"
+import "./THSarabunNew-bold"
 
-// define a generatePDF function that accepts a tickets argument
-const generatePDF = emotionReport => {
-    // initialize jsPDF
+const generatePDF = (emotionReport) => {
     const doc = new jsPDF();
+    const user_id = emotionReport.report_info.user_id
+    const user_type = emotionReport.report_info.user_type
+    const is_submit = emotionReport.report_info.is_submit
+    const current_date = emotionReport.report_info.current_date
 
-    // define the columns we want and their titles
-    const tableColumn = ["Id", "Title", "Issue", "Status", "Closed on"];
-    // define an empty array of rows
+    doc.setFont('THSarabunNew', 'normal');
+
+    doc.setFontSize(8);
+    doc.text("รหัสกลุ่มผู้ทดสอบ : " + user_id, 10, 10);
+
+    doc.setFontSize(18)
+    doc.text('รายงานการวิเคราะห์แนวโน้มภาวะซึมเศร้า', 14, 22,);
+
+    doc.setFontSize(12)
+    doc.text('ประเภทกลุ่มผู้ทดสอบ : ' + user_type, 14, 30)
+    doc.text('วันที่ทดสอบ : ' + current_date, 14, 40)
+
+    doc.setFontSize(12)
+    doc.text(is_submit, 14, 45)
+
+
+    const tableColumn = [["คำถาม", "เวลาที่ใช้ในข้อนี้ (วินาที)", "ผลคะแนนรายข้อ", "พฤติกรรมระหว่างตอบ", "อารมณ์", "คำแนะนำ / ข้อเสนอแนะ"]];
     const tableRows = [];
 
-    // for each ticket pass all its data into an array
-    emotionReport.forEach(result => {
-        const ticketData = [
+    emotionReport.report_data.forEach(result => {
+        const emotionReportData = [
             result.id,
-            result.title,
-            result.request,
-            result.status,
-            // called date-fns to format the date on the ticket
-            format(new Date(result.updated_at), "yyyy-MM-dd")
+            result.reaction_time,
+            result.score,
+            result.behaver,
+            result.emotion,
         ];
-        // push each tickcet's info into a row
-        tableRows.push(ticketData);
+        tableRows.push(emotionReportData);
     });
 
-
+    console.log(tableRows)
     // startY is basically margin-top
-    doc.autoTable(tableColumn, tableRows, { startY: 20 });
+    doc.autoTable({
+        styles: {
+            font: 'THSarabunNew',
+            halign: 'center',
+            valign: 'middle',
+            minCellHeight: 12,
+            fontSize: 12,
+            lineWidth: 0.1,
+        },
+        headStyles: {
+            fontStyle: 'bold',
+            fontSize: 14,
+        },
+        columnStyles: {
+            3: { halign: 'left', cellPadding: 5 },
+            4: { halign: 'left', cellPadding: 5, minCellWidth: 20 },
+        },
+        head: tableColumn,
+        body: tableRows,
+        startY: 50,
+    })
+
     const date = Date().split(" ");
-    // we use a date string to generate our filename.
+    // date string to generate filename.
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
-    // ticket title. and margin-top + margin-left
-    doc.text("Closed tickets within the last one month.", 14, 15);
-    // we define the name of our PDF file.
-    doc.save(`report_${dateStr}.pdf`);
+    // define the name of our PDF file.
+    doc.save(`report_${user_id}_${dateStr}.pdf`);
 };
 
 export default generatePDF;

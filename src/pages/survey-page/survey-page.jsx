@@ -116,7 +116,6 @@ export function SurveyPage() {
         localStorage.setItem('status', "waiting");
         window.addEventListener("storage", () => {
             const status = localStorage.getItem('status');
-            console.log("localStorage status", status)
             if (status === 'Success') {
                 setReportData(getReportInfo());
                 setReportReady(true);

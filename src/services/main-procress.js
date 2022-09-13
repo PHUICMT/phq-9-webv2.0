@@ -39,8 +39,6 @@ export const videoRecorder = (data) => {
             localStorage.setItem('status', status);
             localStorage.setItem('task', "finish");
             window.dispatchEvent(new Event("storage"));
-            console.log("resolveEmotion : ", status);
-            console.log("Emotion Result Table: ", emotion_result_table);
         });
     }
 
@@ -110,7 +108,6 @@ function resolveEmotion(emotion) {
 
 export async function setEmoteResult(emotion_result) {
     const status = await resolveEmotionResult(emotion_result);
-    console.log("setEmoteResult : ", status);
 }
 
 function resolveEmotionResult(emotion) {
