@@ -1,4 +1,5 @@
 const io = require('socket.io-client');
+const axios = require("axios");
 
 const endPoint = "server:5000";
 var socket = undefined;
@@ -146,6 +147,19 @@ function resolveEmotionResult(emotion) {
     });
 }
 
+async function handleOnSendReport(data) {
+    return await axios
+        .post("/api/save-result", data, {
+            headers: { "Content-Type": "application/json" },
+        })
+        .then(function (res) {
+            console.log(res);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+}
+
 export function setSubmitButton(summaryValues) {
     for (const [_, value] of Object.entries(summaryValues)) {
         if (value.checkedValue === -1) {
@@ -164,9 +178,11 @@ export function setUserType(userType) {
     display_info.user_type[userType] = true;
 }
 
-export function getReportInfo() {
-    return {
+export function getReportAndSaveInfo() {
+    const dataToSend = {
         display_info: display_info,
         emotion_result_table: emotion_result_table
     };
+    handleOnSendReport(dataToSend);
+    return dataToSend;
 }

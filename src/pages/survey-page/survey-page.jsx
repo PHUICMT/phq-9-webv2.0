@@ -14,7 +14,7 @@ import {
     setEmoteResult,
     setSubmitButton,
     setUserType,
-    getReportInfo
+    getReportAndSaveInfo
 } from '../../services/main-procress';
 import { VideoPlayer } from '../../services/video-player';
 
@@ -121,7 +121,7 @@ export function SurveyPage() {
         window.addEventListener("storage", () => {
             const status = localStorage.getItem('status');
             if (status === 'Success') {
-                setReportData(getReportInfo());
+                setReportData(getReportAndSaveInfo());
                 setReportReady(true);
                 setShowLoader(false);
                 setReportOpen(true);
