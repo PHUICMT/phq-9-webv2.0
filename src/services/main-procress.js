@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 
-const endPoint = "localhost:9000";
+const endPoint = "server:5000";
 var socket = undefined;
 var userIsDisconnected = false;
 var article = -1;
