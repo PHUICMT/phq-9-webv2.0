@@ -25,7 +25,7 @@ var display_info = {
 
 export const videoRecorder = (data) => {
     display_info.id = data.user_id[0];
-    socket = io.connect(endPoint);
+    socket = io.connect(endPoint, { secure: true });
     if (socket !== undefined) {
         socket.on('connect', function () {
             var userData = {
