@@ -1,7 +1,7 @@
 const io = require('socket.io-client');
 const axios = require("axios");
 
-const endPoint = "server:5000";
+const endPoint = "backend.phq9-thesis.page";
 var socket = undefined;
 var userIsDisconnected = false;
 var article = -1;
