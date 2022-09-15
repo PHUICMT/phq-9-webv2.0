@@ -58,19 +58,18 @@ export function SurveyPage() {
             7: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
             8: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
             9: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-        },
-        submit_count: 0
+        }
     }
 
     const checkAllAnswered = () => {
-        let isAllAnswered = true;
-        for (let i = 1; i <= 9; i++) {
-            if (summaryValues.values[i].checkedValue === -1) {
-                isAllAnswered = false;
-                break;
+        let isAllAnsweredValue = true;
+        for (const [_, value] of Object.entries(summaryValues.values)) {
+            if (value.checkedValue === -1) {
+                isAllAnsweredValue = false;
+                return;
             }
         }
-        setIsAllAnswered(isAllAnswered);
+        setIsAllAnswered(isAllAnsweredValue);
     }
 
     const handleOnCloseModal = (isClosed) => {
@@ -95,11 +94,9 @@ export function SurveyPage() {
             }
         }
         checkAllAnswered();
-        console.log("handleOnRadioChange : ", summaryValues);
     }
 
     const handleConfirmButton = async () => {
-        console.log("handleConfirmButton : ", summaryValues);
         if (isAllAnswered) {
             setShowLoader(true);
             setIsSubmit(true);
@@ -179,7 +176,7 @@ export function SurveyPage() {
                             style={{ width: '-webkit-fill-available' }}>
                             <Button
                                 onClick={() => handleConfirmButton()}
-                                disabled={!isAllAnswered}
+                                disabled={false}
                                 style={styles.button}
                                 variant="contained"
                                 size="large"
