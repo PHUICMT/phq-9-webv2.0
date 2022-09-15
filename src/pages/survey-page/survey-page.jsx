@@ -12,7 +12,6 @@ import {
     stopVideo,
     setArticle,
     setEmoteResult,
-    setSubmitButton,
     setUserType,
     getReportAndSaveInfo,
     setSubmitCount
@@ -31,9 +30,9 @@ export function SurveyPage() {
     const [reportReady, setReportReady] = useState(false);
     const [reportOpen, setReportOpen] = useState(false);
     const [reportData, setReportData] = useState(undefined);
-    const [isAllAnswered, setIsAllAnswered] = useState(false);
-
+    const [enableSubmit, setEnableSubmit] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
+    const [finalSummary, setFinalSummary] = useState(undefined);
 
     const menuTitle = [
         "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
@@ -62,14 +61,13 @@ export function SurveyPage() {
     }
 
     const checkAllAnswered = () => {
-        let isAllAnsweredValue = true;
-        for (const [_, value] of Object.entries(summaryValues.values)) {
+        for (const value of Object.values(summaryValues.values)) {
             if (value.checkedValue === -1) {
-                isAllAnsweredValue = false;
-                return;
+                return false;
             }
         }
-        setIsAllAnswered(isAllAnsweredValue);
+        setFinalSummary(summaryValues);
+        setEnableSubmit(true);
     }
 
     const handleOnCloseModal = (isClosed) => {
@@ -97,12 +95,11 @@ export function SurveyPage() {
     }
 
     const handleConfirmButton = async () => {
-        if (isAllAnswered) {
+        if (enableSubmit) {
             setShowLoader(true);
             setIsSubmit(true);
             stopVideo();
-            setSubmitButton(summaryValues.values);
-            setEmoteResult(summaryValues.values)
+            setEmoteResult(finalSummary.values)
             socketDisconnect({
                 user_id: userID[0]
             });
@@ -176,7 +173,7 @@ export function SurveyPage() {
                             style={{ width: '-webkit-fill-available' }}>
                             <Button
                                 onClick={() => handleConfirmButton()}
-                                disabled={false}
+                                disabled={!enableSubmit}
                                 style={styles.button}
                                 variant="contained"
                                 size="large"

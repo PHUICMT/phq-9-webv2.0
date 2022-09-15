@@ -89,6 +89,7 @@ export function setArticle(number) {
 
 export function setSubmitCount() {
     display_info.submit_count += 1;
+    setIsSubmitButton()
 }
 
 export function stopVideo() {
@@ -132,7 +133,7 @@ export async function setEmoteResult(emotion_result) {
 
 function calculateScore() {
     var score = 0;
-    for (const [_, value] of Object.entries(emotion_result_table)) {
+    for (const value of Object.values(emotion_result_table)) {
         if (value.score >= 0) {
             score += Number(value.score);
         }
@@ -165,21 +166,14 @@ async function handleOnSendReport(data) {
         });
 }
 
-export function setSubmitButton(summaryValues) {
+function setIsSubmitButton() {
     if (display_info.is_submit === false) {
-        for (const [_, value] of Object.entries(summaryValues)) {
-            if (value.checkedValue === -1) {
-                display_info.is_submit = true;
-                return true;
-            }
-        }
-        display_info.is_submit = false;
-        return false
+        display_info.is_submit = true;
     }
 }
 
 export function setUserType(userType) {
-    for (const [key, _] of Object.entries(display_info.user_type)) {
+    for (const key of Object.keys(display_info.user_type)) {
         display_info.user_type[key] = false;
     }
     display_info.user_type[userType] = true;
