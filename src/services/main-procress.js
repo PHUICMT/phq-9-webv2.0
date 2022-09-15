@@ -61,19 +61,22 @@ export const videoRecorder = (data) => {
 
     const FPS = 7;
     setInterval(() => {
-        var width = 400;
-        var height = 300;
-        context.drawImage(video, 0, 0, width, height);
-        var imageBase64 = canvas.toDataURL("image/jpeg").split(';base64,')[1];
-        context.clearRect(0, 0, width, height);
-        var dataToSend = {
-            imageBase64: imageBase64,
-            timeStamp: Math.floor(new Date().getTime() / 1000),
-            user_id: data.user_id[0],
-            article: article
-        }
-        if (userIsDisconnected !== true && article !== -1) {
-            socket.emit('image', dataToSend);
+        if (article !== -1) {
+            var width = 400;
+            var height = 300;
+            context.drawImage(video, 0, 0, width, height);
+            var imageBase64 = canvas.toDataURL("image/jpeg").split(';base64,')[1];
+            context.clearRect(0, 0, width, height);
+            var dataToSend = {
+                imageBase64: imageBase64,
+                timeStamp: Math.floor(new Date().getTime() / 1000),
+                user_id: data.user_id[0],
+                article: article
+            }
+            console.log(dataToSend);
+            if (userIsDisconnected !== true) {
+                socket.emit('image', dataToSend);
+            }
         }
     }, 1000 / FPS);
 }
