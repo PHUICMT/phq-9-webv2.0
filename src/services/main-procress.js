@@ -59,7 +59,7 @@ export const videoRecorder = (data) => {
             });
     }
 
-    const FPS = 25;
+    const FPS = 7;
     setInterval(() => {
         var width = 400;
         var height = 300;
