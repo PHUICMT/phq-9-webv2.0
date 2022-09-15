@@ -214,7 +214,15 @@ export function ReportModal(props) {
             setExportReportData(exportData);
             setExportReportInfo(exportInfo);
         }
-    }, [reportData, id, userType, currentDate]);
+    }, [
+        reportData,
+        id,
+        userType,
+        currentDate,
+        isSubmitted,
+        props.open,
+        props.reportData
+    ]);
 
     const getEmotionReport = (emotion) => {
         var emotionReport = '';

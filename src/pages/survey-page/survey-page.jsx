@@ -73,28 +73,13 @@ export function SurveyPage() {
         setIsAllAnswered(isAllAnswered);
     }
 
-    const handleConfirmButton = async () => {
-        if (isAllAnswered) {
-            setShowLoader(true);
-            setIsSubmit(true);
-            stopVideo();
-            setSubmitButton(summaryValues.values);
-            setEmoteResult(summaryValues.values)
-            socketDisconnect({
-                user_id: userID[0]
-            });
-        } else {
-            setSubmitCount()
-        }
-    }
-
     const handleOnCloseModal = (isClosed) => {
         setModalClosed(isClosed);
     }
 
     const handleOnRadioChange = (index, value) => {
         let oldValue = summaryValues.values[index].checkedValue;
-        summaryValues.values[index].checkedValue = value;
+        summaryValues.values[index].checkedValue = Number(value);
         if (oldValue !== -1) {
             summaryValues.values[index].behaver.change = true;
         }
@@ -110,6 +95,23 @@ export function SurveyPage() {
             }
         }
         checkAllAnswered();
+        console.log("handleOnRadioChange : ", summaryValues);
+    }
+
+    const handleConfirmButton = async () => {
+        console.log("handleConfirmButton : ", summaryValues);
+        if (isAllAnswered) {
+            setShowLoader(true);
+            setIsSubmit(true);
+            stopVideo();
+            setSubmitButton(summaryValues.values);
+            setEmoteResult(summaryValues.values)
+            socketDisconnect({
+                user_id: userID[0]
+            });
+        } else {
+            setSubmitCount()
+        }
     }
 
     const handleOnMouseLeave = (value) => {
@@ -171,24 +173,29 @@ export function SurveyPage() {
             }
             <Stack spacing={2} alignItems="center">
                 {
-                    (isSubmit === false) ? <Button
-                        onClick={() => handleConfirmButton()}
-                        disabled={!isAllAnswered}
-                        style={styles.button}
-                        variant="contained"
-                        size="large"
-                        endIcon={<SendIcon />}
-                    >
-                        ส่งคำตอบ
-                    </Button> : <Button
-                        onClick={() => setReportOpen(true)}
-                        style={styles.button}
-                        variant="contained"
-                        size="large"
-                        endIcon={<SendIcon />}
-                    >
-                        แสดงผลการประเมิน
-                    </Button>
+                    (isSubmit === false) ?
+                        <div
+                            onClick={() => handleConfirmButton()}
+                            style={{ width: '-webkit-fill-available' }}>
+                            <Button
+                                onClick={() => handleConfirmButton()}
+                                disabled={!isAllAnswered}
+                                style={styles.button}
+                                variant="contained"
+                                size="large"
+                                endIcon={<SendIcon />}
+                            >
+                                ส่งคำตอบ
+                            </Button>
+                        </div> : <Button
+                            onClick={() => setReportOpen(true)}
+                            style={styles.button}
+                            variant="contained"
+                            size="large"
+                            endIcon={<SendIcon />}
+                        >
+                            แสดงผลการประเมิน
+                        </Button>
                 }
                 <FooterTextPaper />
             </Stack>

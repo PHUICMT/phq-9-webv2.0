@@ -67,15 +67,14 @@ export function RowRadioButtonsGroup(props) {
                         <Grid2 xs>
                             <FormControl>
                                 <RadioGroup
-                                    row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
                                     onChange={handleOnRadioChange}
                                 >
-                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={0} control={<Radio />} label="0" />
-                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={1} control={<Radio />} label="1" />
-                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={2} control={<Radio />} label="2" />
-                                    <MyFormControlLabel disabled={props.disabled} labelPlacement="top" value={3} control={<Radio />} label="3" />
+                                    <MyFormControlLabel disabled={props.disabled} value={0} control={<Radio />} label="(0) ไม่เลย" />
+                                    <MyFormControlLabel disabled={props.disabled} value={1} control={<Radio />} label="(1) มีบางวันหรือไม่บ่อย" />
+                                    <MyFormControlLabel disabled={props.disabled} value={2} control={<Radio />} label="(2) มีค่อนข้างบ่อย" />
+                                    <MyFormControlLabel disabled={props.disabled} value={3} control={<Radio />} label="(3) มีเกือบทุกวัน" />
                                 </RadioGroup>
                             </FormControl>
                         </Grid2>
