@@ -14,7 +14,8 @@ import {
     setEmoteResult,
     setSubmitButton,
     setUserType,
-    getReportAndSaveInfo
+    getReportAndSaveInfo,
+    setSubmitCount
 } from '../../services/main-procress';
 import { VideoPlayer } from '../../services/video-player';
 
@@ -30,6 +31,7 @@ export function SurveyPage() {
     const [reportReady, setReportReady] = useState(false);
     const [reportOpen, setReportOpen] = useState(false);
     const [reportData, setReportData] = useState(undefined);
+    const [isAllAnswered, setIsAllAnswered] = useState(false);
 
     const [showLoader, setShowLoader] = useState(false);
 
@@ -56,19 +58,34 @@ export function SurveyPage() {
             7: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
             8: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
             9: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+        },
+        submit_count: 0
+    }
+
+    const checkAllAnswered = () => {
+        let isAllAnswered = true;
+        for (let i = 1; i <= 9; i++) {
+            if (summaryValues.values[i].checkedValue === -1) {
+                isAllAnswered = false;
+                break;
+            }
         }
+        setIsAllAnswered(isAllAnswered);
     }
 
     const handleConfirmButton = async () => {
-        setShowLoader(true);
-        setIsSubmit(true);
-        stopVideo();
-        setSubmitButton(summaryValues.values);
-        setEmoteResult(summaryValues.values)
-        socketDisconnect({
-            user_id: userID[0]
-        });
-
+        if (isAllAnswered) {
+            setShowLoader(true);
+            setIsSubmit(true);
+            stopVideo();
+            setSubmitButton(summaryValues.values);
+            setEmoteResult(summaryValues.values)
+            socketDisconnect({
+                user_id: userID[0]
+            });
+        } else {
+            setSubmitCount()
+        }
     }
 
     const handleOnCloseModal = (isClosed) => {
@@ -92,6 +109,7 @@ export function SurveyPage() {
                 return;
             }
         }
+        checkAllAnswered();
     }
 
     const handleOnMouseLeave = (value) => {
@@ -155,6 +173,7 @@ export function SurveyPage() {
                 {
                     (isSubmit === false) ? <Button
                         onClick={() => handleConfirmButton()}
+                        disabled={!isAllAnswered}
                         style={styles.button}
                         variant="contained"
                         size="large"

@@ -20,7 +20,8 @@ var display_info = {
     id: "0000",
     is_submit: false,
     user_type: { "normal": false, "depressed": false, "being_treated": false },
-    result: {}
+    result: {},
+    submit_count: 0,
 }
 
 export const videoRecorder = (data) => {
@@ -84,6 +85,10 @@ export function socketDisconnect(data) {
 
 export function setArticle(number) {
     article = number;
+}
+
+export function setSubmitCount() {
+    display_info.submit_count += 1;
 }
 
 export function stopVideo() {
@@ -161,14 +166,16 @@ async function handleOnSendReport(data) {
 }
 
 export function setSubmitButton(summaryValues) {
-    for (const [_, value] of Object.entries(summaryValues)) {
-        if (value.checkedValue === -1) {
-            display_info.is_submit = true;
-            return true;
+    if (display_info.is_submit === false) {
+        for (const [_, value] of Object.entries(summaryValues)) {
+            if (value.checkedValue === -1) {
+                display_info.is_submit = true;
+                return true;
+            }
         }
+        display_info.is_submit = false;
+        return false
     }
-    display_info.is_submit = false;
-    return false
 }
 
 export function setUserType(userType) {

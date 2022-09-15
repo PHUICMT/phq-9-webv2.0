@@ -208,6 +208,7 @@ export function ReportModal(props) {
                 is_submit: isSubmitted ? 'ส่งแบบทดสอบก่อนตอบครบทุกข้อ' : '',
                 current_date: currentDate,
                 result: props.reportData.display_info.result,
+                submit_count: props.reportData.display_info.submit_count,
             }
 
             setExportReportData(exportData);
