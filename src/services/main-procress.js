@@ -26,7 +26,7 @@ var display_info = {
 
 export const videoRecorder = (data) => {
     display_info.id = data.user_id[0];
-    socket = io.connect(endPoint, { secure: true });
+    socket = io.connect(endPoint);
     if (socket !== undefined) {
         socket.on('connect', function () {
             var userData = {
@@ -37,10 +37,8 @@ export const videoRecorder = (data) => {
         });
 
         socket.on('emotion', async function (emotion) {
-            localStorage.setItem('task', "process");
             const status = await resolveEmotion(emotion);
             localStorage.setItem('status', status);
-            localStorage.setItem('task', "finish");
             window.dispatchEvent(new Event("storage"));
         });
     }
@@ -73,12 +71,15 @@ export const videoRecorder = (data) => {
                 user_id: data.user_id[0],
                 article: article
             }
-            console.log(dataToSend);
             if (userIsDisconnected !== true) {
                 socket.emit('image', dataToSend);
             }
         }
     }, 1000 / FPS);
+}
+
+export function socketResetData() {
+    socket.emit('reset_data');
 }
 
 export function socketDisconnect(data) {
@@ -157,16 +158,16 @@ function resolveEmotionResult(emotion) {
 }
 
 async function handleOnSendReport(data) {
-    return await axios
-        .post("/api/save-result", data, {
-            headers: { "Content-Type": "application/json" },
-        })
-        .then(function (res) {
-            console.log(res);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+    // return await axios
+    //     .post("/api/save-result", data, {
+    //         headers: { "Content-Type": "application/json" },
+    //     })
+    //     .then(function (res) {
+    //         console.log(res);
+    //     })
+    //     .catch(function (error) {
+    //         console.log(error);
+    //     });
 }
 
 function setIsSubmitButton() {
@@ -187,6 +188,7 @@ export function getReportAndSaveInfo() {
         display_info: display_info,
         emotion_result_table: emotion_result_table
     };
-    handleOnSendReport(dataToSend);
+    // handleOnSendReport(dataToSend);
+    socketResetData();
     return dataToSend;
 }

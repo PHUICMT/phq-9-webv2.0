@@ -14,7 +14,8 @@ import {
     setEmoteResult,
     setUserType,
     getReportAndSaveInfo,
-    setSubmitCount
+    setSubmitCount,
+    socketResetData
 } from '../../services/main-procress';
 import { VideoPlayer } from '../../services/video-player';
 
