@@ -3,7 +3,7 @@ import "jspdf-autotable";
 import "./THSarabunNew-normal"
 import "./THSarabunNew-bold"
 
-const generatePDF = (emotionReport) => {
+const generatePDF = (emotionReport, decision) => {
     const doc = new jsPDF();
     const user_id = emotionReport.report_info.user_id
     const user_type = emotionReport.report_info.user_type
@@ -13,6 +13,7 @@ const generatePDF = (emotionReport) => {
     const result_color = emotionReport.report_info.result.color
     const submit_count = emotionReport.report_info.submit_count
     const date_full = Date()
+    const decision_text = decision
 
     doc.setFont('THSarabunNew', 'normal');
 
@@ -29,6 +30,13 @@ const generatePDF = (emotionReport) => {
     doc.setTextColor("#ff0000")
     doc.text(is_submit, 190, 10, { align: "right" })
     doc.text('ครั้งที่กดส่งแบบทดสอบ : ' + submit_count, 190, 15, { align: "right" })
+
+    if (decision_text === "Not Relate"){
+        doc.setTextColor("#ff0000")
+    } else {
+        doc.setTextColor("#49eb34")
+    }
+    doc.text('ความสอดคล้อง : ' + decision_text, 190, 25, { align: "right" })
 
     doc.setTextColor("#000")
     doc.text('ผลการวิเคราะห์ : ', 14, 50)

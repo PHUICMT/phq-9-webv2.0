@@ -285,6 +285,7 @@ export function SurveyPage() {
                 (reportReady && reportOpen)
             }
             reportData={reportData}
+            decision={decision}
             onCloseModal={
                 (e) => setReportOpen(!e)
             }/>

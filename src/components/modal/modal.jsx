@@ -121,9 +121,12 @@ export function ReportModal(props) {
     const [exportReportData, setExportReportData] = useState(undefined);
     const [exportReportInfo, setExportReportInfo] = useState(undefined);
 
+    const [decision, setDecision] = useState(undefined);
+
     useEffect(() => {
         setOpen(props.open);
         setReportData(props.reportData);
+        setDecision(props.decision);
         if (props.open === true) {
             setIsSubmitted(props.reportData.display_info.is_submit);
             setId(props.reportData.display_info.id);
@@ -133,7 +136,7 @@ export function ReportModal(props) {
                 )
             );
         }
-    }, [props.open, props.reportData]);
+    }, [props.open, props.reportData, props.decision]);
 
     useEffect(() => {
         if (props.open === true) {
@@ -286,7 +289,7 @@ export function ReportModal(props) {
             report_info: exportReportInfo,
             report_data: exportReportData
         }
-        generatePDF(reportData);
+        generatePDF(reportData, decision);
     }
 
     return (
