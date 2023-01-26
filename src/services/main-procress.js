@@ -226,7 +226,7 @@ function resolveEmotionResult(emotion) {
 
 async function handleOnSendReport(data) {
     return new Promise((resolve, reject) => {
-        axios.post("http://103.74.254.146:5000/api/save-result", data, {
+        axios.post("https://backend.phq9-thesis.page/api/save-result", data, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -343,7 +343,7 @@ export async function getDecision() {
         "No Emotion": emotionPercent["No Emotion"]
     }
     return new Promise((resolve, reject) => {
-        axios.post("http://103.74.254.146:5050/get-decision", getDecisionRequest, {
+        axios.post("https://decision.phq9-thesis.page/get-decision", getDecisionRequest, {
             headers: {
                 "Content-Type": "application/json"
             }
