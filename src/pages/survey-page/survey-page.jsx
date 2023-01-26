@@ -1,10 +1,10 @@
-import { styles } from './survey-page-styles';
+import {styles} from './survey-page-styles';
 
-import { RowRadioButtonsGroup } from '../../components/survey-item/survey-item';
-import { Header } from '../../components/header/header';
-import { FooterTextPaper } from '../../components/text-info/text-info';
-import { ConfirmModal, ReportModal } from '../../components/modal/modal';
-import { LoadingModal } from '../../components/loader/loader';
+import {RowRadioButtonsGroup} from '../../components/survey-item/survey-item';
+import {Header} from '../../components/header/header';
+import {FooterTextPaper} from '../../components/text-info/text-info';
+import {ConfirmModal, ReportModal} from '../../components/modal/modal';
+import {LoadingModal} from '../../components/loader/loader';
 
 import {
     videoRecorder,
@@ -15,14 +15,14 @@ import {
     setUserType,
     getReportAndSaveInfo,
     setSubmitCount,
-    socketResetData
+    getDecision
 } from '../../services/main-procress';
-import { VideoPlayer } from '../../services/video-player';
+import {VideoPlayer} from '../../services/video-player';
 
-import { useState, useEffect } from 'react';
-import { Container, Button, Stack } from '@mui/material';
+import {useState, useEffect} from 'react';
+import {Container, Button, Stack} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 export function SurveyPage() {
     const userID = useState(uuidv4());
@@ -34,6 +34,7 @@ export function SurveyPage() {
     const [enableSubmit, setEnableSubmit] = useState(false);
     const [showLoader, setShowLoader] = useState(false);
     const [finalSummary, setFinalSummary] = useState(undefined);
+    const [decision, setDecision] = useState(undefined);
 
     const menuTitle = [
         "1. เบื่อ ทำอะไร ๆ ก็ไม่เพลิดเพลิน",
@@ -49,15 +50,96 @@ export function SurveyPage() {
 
     var summaryValues = {
         values: {
-            1: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            2: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            3: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            4: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            5: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            6: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            7: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            8: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
-            9: { checkedValue: -1, hoverTime: 0, behaver: { change: false, skip: false, return: false, over: false } },
+            1: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            2: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            3: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            4: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            5: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            6: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            7: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            8: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            },
+            9: {
+                checkedValue: -1,
+                hoverTime: 0,
+                behaver: {
+                    change: false,
+                    skip: false,
+                    return: false,
+                    over: false
+                }
+            }
         }
     }
 
@@ -101,9 +183,7 @@ export function SurveyPage() {
             setIsSubmit(true);
             stopVideo();
             setEmoteResult(finalSummary.values)
-            socketDisconnect({
-                user_id: userID[0]
-            });
+            socketDisconnect({user_id: userID[0]});
         } else {
             setSubmitCount()
         }
@@ -122,89 +202,96 @@ export function SurveyPage() {
 
     useEffect(() => {
         if (modalClosed) {
-            videoRecorder({
-                user_id: userID
-            });
+            videoRecorder({user_id: userID});
         }
-    }, [
-        userID,
-        modalClosed
-    ]);
+    }, [userID, modalClosed]);
 
     useEffect(() => {
         localStorage.setItem('status', "waiting");
-        window.addEventListener("storage", () => {
+        window.addEventListener("storage", async () => {
             const status = localStorage.getItem('status');
             if (status === 'Success') {
-                setReportData(getReportAndSaveInfo());
+                await getReportAndSaveInfo().then(async (res) => {
+                    setReportData(res);
+                    await getDecision().then((res) => {
+                        setDecision(res);
+                    }).catch((_) => {
+                        setDecision("Error")
+                    });
+                });
                 setReportReady(true);
                 setShowLoader(false);
                 setReportOpen(true);
             }
         });
-        return () => {
+        return() => {
             window.removeEventListener("storage", null);
         }
     }, []);
 
-    return (
-        <Container>
-            <VideoPlayer className="video-player" />
-            <Header />
-            {menuTitle.map((title, index) => {
-                return (
-                    <RowRadioButtonsGroup
-                        key={index}
-                        onMouseEnter={setArticle}
-                        onMouseLeave={handleOnMouseLeave}
-                        index={index + 1}
-                        onRadioChange={handleOnRadioChange}
-                        title={title}
-                        disabled={isSubmit}
-                    />
-
-                )
-            })
-            }
-            <Stack spacing={2} alignItems="center">
-                {
-                    (isSubmit === false) ?
-                        <div
-                            onClick={() => handleConfirmButton()}
-                            style={{ width: '-webkit-fill-available' }}>
-                            <Button
-                                onClick={() => handleConfirmButton()}
-                                disabled={!enableSubmit}
-                                style={styles.button}
-                                variant="contained"
-                                size="large"
-                                endIcon={<SendIcon />}
-                            >
-                                ส่งคำตอบ
-                            </Button>
-                        </div> : <Button
-                            onClick={() => setReportOpen(true)}
-                            style={styles.button}
-                            variant="contained"
-                            size="large"
-                            endIcon={<SendIcon />}
-                        >
-                            แสดงผลการประเมิน
-                        </Button>
+    return (<Container>
+        <VideoPlayer className="video-player"/>
+        <Header/> {
+        menuTitle.map((title, index) => {
+            return (<RowRadioButtonsGroup key={index}
+                onMouseEnter={setArticle}
+                onMouseLeave={handleOnMouseLeave}
+                index={
+                    index + 1
                 }
-                <FooterTextPaper />
-            </Stack>
-            <LoadingModal open={showLoader} />
-            <ReportModal
-                open={(reportReady && reportOpen)}
-                reportData={reportData}
-                onCloseModal={(e) => setReportOpen(!e)}
-            />
-            <ConfirmModal
-                open={!modalClosed}
-                onCloseModal={handleOnCloseModal}
-                onUserTypeChange={setUserType}
-            />
-        </Container>
-    );
+                onRadioChange={handleOnRadioChange}
+                title={title}
+                disabled={isSubmit}/>)
+        })
+    }
+        <Stack spacing={2}
+            alignItems="center"> {
+            (isSubmit === false) ? <div onClick={
+                    () => handleConfirmButton()
+                }
+                style={
+                    {width: '-webkit-fill-available'}
+            }>
+                <Button onClick={
+                        () => handleConfirmButton()
+                    }
+                    disabled={
+                        !enableSubmit
+                    }
+                    style={
+                        styles.button
+                    }
+                    variant="contained"
+                    size="large"
+                    endIcon={<SendIcon/>}>
+                    ส่งคำตอบ
+                </Button>
+            </div> : <Button onClick={
+                    () => setReportOpen(true)
+                }
+                style={
+                    styles.button
+                }
+                variant="contained"
+                size="large"
+                endIcon={<SendIcon/>}>
+                แสดงผลการประเมิน
+            </Button>
+        }
+            <FooterTextPaper/>
+        </Stack>
+        <LoadingModal open={showLoader}/>
+        <ReportModal open={
+                (reportReady && reportOpen)
+            }
+            reportData={reportData}
+            onCloseModal={
+                (e) => setReportOpen(!e)
+            }/>
+        <ConfirmModal open={
+                !modalClosed
+            }
+            onCloseModal={handleOnCloseModal}
+            onUserTypeChange={setUserType}/>
+    </Container>);
 }
