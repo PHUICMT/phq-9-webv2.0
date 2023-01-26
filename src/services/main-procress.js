@@ -265,72 +265,79 @@ export async function getReportAndSaveInfo() {
     });
 }
 
-export async function getDecision() {
+async function getDecisionRequest() {
     const score = calculateScore();
-    const userType = () => {
-        var userType = display_info.user_type
-        if (userType["normal"]) {
-            return "Normal"
-        } else if (userType["depressed"]) {
-            return "Depression"
-        } else if (userType["being_treated"]) {
-            return "treating"
-        } else {
-            return "Normal"
-        }
+    const userTypeFunc = async () => {
+        return await new Promise(resolve => {
+            var userType = display_info.user_type
+            if (userType["normal"]) {
+                resolve("Normal")
+            } else if (userType["depressed"]) {
+                resolve("Depression")
+            } else if (userType["being_treated"]) {
+                resolve("treating")
+            } else {
+                resolve("Normal")
+            }
+        })
     }
-    const behavior = () => {
-        var behavior = {
-            Change: "N",
-            Skip: "N",
-            Overtime: "N",
-            Submit: "N"
-        }
-        for (const value of Object.values(emotion_result_table)) {
-            if (value.behaver !== {}) {
-                if (value.behaver.change === true) {
-                    behavior.Change = "Y"
-                }
-                if (value.behaver.skip === true) {
-                    behavior.Skip = "Y"
-                }
-                if (value.behaver.over === true) {
-                    behavior.Overtime = "Y"
+    const behaviorFunc = async () => {
+        return await new Promise(resolve => {
+            var behavior = {
+                Change: "N",
+                Skip: "N",
+                Overtime: "N",
+                Submit: "N"
+            }
+            for (const value of Object.values(emotion_result_table)) {
+                if (value.behaver !== {}) {
+                    if (value.behaver.change === true) {
+                        behavior.Change = "Y"
+                    }
+                    if (value.behaver.skip === true) {
+                        behavior.Skip = "Y"
+                    }
+                    if (value.behaver.over === true) {
+                        behavior.Overtime = "Y"
+                    }
                 }
             }
-        }
-        if (display_info.submit_count > 0) {
-            behavior.Submit = "Y"
-        }
-        return behavior
+            if (display_info.submit_count > 0) {
+                behavior.Submit = "Y"
+            }
+            resolve(behavior)
+        })
     }
-    const emotionPercent = () => {
-        var emotionPercent = {
-            "Worry": 0,
-            "Sad": 0,
-            "Happy": 0,
-            "No Emotion": 0
-        }
-        for (const value of Object.values(emotion_result_table)) {
-            var emotion = value.emotion
-            if (emotion !== undefined) {
-                if (emotion["fear"] !== undefined && (emotionPercent["Worry"] < emotion["fear"])) {
-                    emotionPercent["Worry"] = emotion["fear"]
-                }
-                if (emotion["sad"] !== undefined && (emotionPercent["Sad"] < emotion["sad"])) {
-                    emotionPercent["Sad"] = emotion["sad"]
-                }
-                if (emotion["happy"] !== undefined && (emotionPercent["Happy"] < emotion["happy"])) {
-                    emotionPercent["Happy"] = emotion["happy"]
-                }
-                if (emotion["neutral"] !== undefined && (emotionPercent["No Emotion"] < emotion["neutral"])) {
-                    emotionPercent["No Emotion"] = emotion["neutral"]
+    const emotionPercentFunc = async () => {
+        return await new Promise(resolve => {
+            var emotionPercent = {
+                "Worry": 0,
+                "Sad": 0,
+                "Happy": 0,
+                "No Emotion": 0
+            }
+            for (const value of Object.values(emotion_result_table)) {
+                var emotion = value.emotion
+                if (emotion !== undefined) {
+                    if (emotion["fear"] !== undefined && (emotionPercent["Worry"] < emotion["fear"])) {
+                        emotionPercent["Worry"] = emotion["fear"]
+                    }
+                    if (emotion["sad"] !== undefined && (emotionPercent["Sad"] < emotion["sad"])) {
+                        emotionPercent["Sad"] = emotion["sad"]
+                    }
+                    if (emotion["happy"] !== undefined && (emotionPercent["Happy"] < emotion["happy"])) {
+                        emotionPercent["Happy"] = emotion["happy"]
+                    }
+                    if (emotion["neutral"] !== undefined && (emotionPercent["No Emotion"] < emotion["neutral"])) {
+                        emotionPercent["No Emotion"] = emotion["neutral"]
+                    }
                 }
             }
-        }
-        return emotionPercent
+            resolve(emotionPercent)
+        })
     }
-    const getDecisionRequest = {
+    const [userType, behavior, emotionPercent] = await Promise.all([userTypeFunc(), behaviorFunc(), emotionPercentFunc()])
+    return {
         "Type": userType,
         "Score": score,
         "Change": behavior.Change,
@@ -342,12 +349,18 @@ export async function getDecision() {
         "Happy": emotionPercent["Happy"],
         "No Emotion": emotionPercent["No Emotion"]
     }
+}
+
+export async function getDecision() {
+    const getDecisionRequestConst = await getDecisionRequest()
     return new Promise((resolve, reject) => {
-        axios.post("https://decision.phq9-thesis.page/get-decision", getDecisionRequest, {
+        axios.post("https://decision.phq9-thesis.page/get-decision", getDecisionRequestConst, {
             headers: {
                 "Content-Type": "application/json"
             }
         }).then(function (res) {
+            console.log(getDecisionRequestConst)
+            console.log(res.data)
             resolve(res.data)
         }).catch(function (_) {
             reject("Error")
