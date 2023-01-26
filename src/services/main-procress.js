@@ -1,7 +1,7 @@
 const io = require('socket.io-client');
 const axios = require("axios");
 
-const endPoint = "http://server:5000";
+const endPoint = "http://103.74.254.146:5000";
 var socket = undefined;
 var userIsDisconnected = false;
 var article = -1;
@@ -226,7 +226,7 @@ function resolveEmotionResult(emotion) {
 
 async function handleOnSendReport(data) {
     return new Promise((resolve, reject) => {
-        axios.post("/api/save-result", data, {
+        axios.post("http://103.74.254.146:5000/api/save-result", data, {
             headers: {
                 "Content-Type": "application/json"
             }
@@ -343,7 +343,7 @@ export async function getDecision() {
         "No Emotion": emotionPercent["No Emotion"]
     }
     return new Promise((resolve, reject) => {
-        axios.post("http://server-decision:5050/get-decision", getDecisionRequest, {
+        axios.post("http://103.74.254.146:5050/get-decision", getDecisionRequest, {
             headers: {
                 "Content-Type": "application/json"
             }

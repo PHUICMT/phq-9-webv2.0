@@ -1,7 +1,6 @@
 {
   "name": "phq-9-web-v2.0",
   "version": "0.1.0",
-  "proxy": "http://backend:5000",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.0",
