@@ -13,7 +13,7 @@ const generatePDF = (emotionReport, decision) => {
     const result_color = emotionReport.report_info.result.color
     const submit_count = emotionReport.report_info.submit_count
     const date_full = Date()
-    const decision_text = decision
+    var decision_text = decision
 
     doc.setFont('THSarabunNew', 'normal');
 
@@ -31,12 +31,17 @@ const generatePDF = (emotionReport, decision) => {
     doc.text(is_submit, 190, 10, { align: "right" })
     doc.text('ครั้งที่กดส่งแบบทดสอบ : ' + submit_count, 190, 15, { align: "right" })
 
+    doc.setTextColor("#000")
+    doc.text('ผลการประเมินความสอดคล้องระหว่าง', 190, 20, { align: "right" })
+    doc.text('คะแนน PHQ-9 พฤติกรรมอาการ และอารมณ์', 190, 25, { align: "right" })
     if (decision_text === "Not Relate"){
         doc.setTextColor("#ff0000")
+        decision_text = "ไม่สอดคล้อง"
     } else {
-        doc.setTextColor("#49eb34")
+        doc.setTextColor("#003300")
+        decision_text = "สอดคล้อง"
     }
-    doc.text('ความสอดคล้อง : ' + decision_text, 190, 25, { align: "right" })
+    doc.text(": " + decision_text, 190, 30, { align: "right" })
 
     doc.setTextColor("#000")
     doc.text('ผลการวิเคราะห์ : ', 14, 50)
@@ -88,7 +93,7 @@ const generatePDF = (emotionReport, decision) => {
 
     const date = date_full.split(" ");
     const dateStr = date[0] + date[1] + date[2] + date[3] + date[4];
-    doc.save(`report_${user_id}_${dateStr}.pdf`);
+    doc.save(`report_${user_type}_${dateStr}_${user_id}.pdf`);
 };
 
 export default generatePDF;
